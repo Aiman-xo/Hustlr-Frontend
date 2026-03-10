@@ -1,0 +1,121 @@
+@import 'tailwindcss';
+
+/* --- GLASSMORPHISM TOAST OVERRIDES --- */
+
+/* 1. Target the main container to allow the glass to 'breathe' */
+.Toastify__toast-container {
+  padding: 12px !important;
+}
+
+.Toastify__toast {
+  background: rgba(255, 255, 255, 0.45) !important;
+  /* Increased blur for a better effect */
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+
+  /* Sharp white border for 'etched' look */
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  border-radius: 16px !important;
+
+  /* Prevent the progress bar from leaking out */
+  overflow: hidden !important;
+
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15) !important;
+  padding: 14px !important;
+  color: #1f2937 !important;
+}
+
+/* 2. Fix the Progress Bar taking too much space */
+.Toastify__progress-bar {
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 5px !important;
+  /* Match the toast radius so it doesn't look square at the bottom */
+  border-radius: 0 0 16px 16px !important;
+}
+
+/* 3. The inner body needs to be transparent to see the blur */
+.Toastify__toast-body {
+  background: transparent !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* 4. Success-specific glow */
+.Toastify__toast--success {
+  box-shadow: 0 8px 32px 0 rgba(34, 197, 94, 0.1) !important;
+}
+
+.Toastify__progress-bar--success {
+  background: linear-gradient(to right, #22c55e, #16a34a) !important;
+}
+
+/* :root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+} */
