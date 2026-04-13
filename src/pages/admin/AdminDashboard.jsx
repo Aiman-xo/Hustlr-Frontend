@@ -102,7 +102,7 @@ const AdminDashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {[
           { label: "Gross Billing", value: `₹${stats?.financials?.total_platform_billing.toLocaleString() || 0}`, icon: "payments", trend: "+12%" },
-          { label: "Active Nodes", value: stats?.users?.total_active || 0, icon: "analytics", trend: "Stable" },
+          { label: "Unpaid Liability", value: `₹${stats?.financials?.total_unpaid_amount?.toLocaleString() || 0}`, icon: "request_quote", trend: "Alert" },
           { label: "Total Workforce", value: stats?.users?.total_workers || 0, icon: "engineering", trend: "+5%" },
           { label: "Job Requests", value: stats?.jobs?.active || 0, icon: "assignment", trend: "High" },
         ].map((item, i) => (
@@ -141,8 +141,8 @@ const AdminDashboard = () => {
           <h2 className="text-sm font-black uppercase tracking-widest text-white mb-8 text-center">System Health</h2>
           <div className="space-y-6">
             {[
-              { label: "Pending Jobs", count: stats?.jobs?.pending || 0, color: "bg-yellow-500" },
-              { label: "Completed Success", count: stats?.jobs?.completed || 0, color: "bg-white" },
+              { label: "Paid Settlements", count: stats?.jobs?.paid_jobs || 0, color: "bg-emerald-500" },
+              { label: "Unpaid Invoices", count: stats?.jobs?.unpaid_jobs || 0, color: "bg-rose-500" },
               { label: "Suspended Accounts", count: stats?.users?.total_blocked || 0, color: "bg-red-500" },
               { label: "Open Postings", count: stats?.jobs?.total_job_posts || 0, color: "bg-blue-500" },
             ].map((stat, i) => (

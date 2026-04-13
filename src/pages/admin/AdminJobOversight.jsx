@@ -10,8 +10,15 @@ const AdminJobOversight = () => {
   const [activeStatus, setActiveStatus] = React.useState("all");
 
   useEffect(() => {
-    dispatch(fetchJobs({ page: 1, status: activeStatus === "all" ? "" : activeStatus }));
-  }, [dispatch, activeStatus]);
+    const timer = setTimeout(() => {
+        dispatch(fetchJobs({ 
+            page: 1, 
+            status: activeStatus === "all" ? "" : activeStatus,
+            search: searchQuery
+        }));
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [dispatch, activeStatus, searchQuery]);
 
   if (loading && !jobs.length) {
     return <AdminLoader />;
@@ -19,7 +26,11 @@ const AdminJobOversight = () => {
 
   const handlePageChange = (newPage) => {
     if (newPage > 0 && newPage <= jobsPagination.totalPages) {
-      dispatch(fetchJobs({ page: newPage, status: activeStatus === "all" ? "" : activeStatus }));
+      dispatch(fetchJobs({ 
+        page: newPage, 
+        status: activeStatus === "all" ? "" : activeStatus,
+        search: searchQuery
+      }));
     }
   };
 
@@ -30,12 +41,6 @@ const AdminJobOversight = () => {
     { id: "completed", label: "Completed" },
     { id: "cancelled_or_rejected", label: "Terminated" },
   ];
-
-  const filteredJobs = jobs.filter(job => 
-    job.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    job.employer_company?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    job.worker_name?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   return (
     <div className="space-y-6">
@@ -74,8 +79,8 @@ const AdminJobOversight = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-neutral-900">
-              {filteredJobs.length > 0 ? (
-                filteredJobs.map((job) => (
+              {jobs?.length > 0 ? (
+                jobs.map((job) => (
                   <tr key={job.id} className="hover:bg-neutral-800/10 transition-colors group text-sm">
                     <td className="px-8 py-5">
                       <span className="block font-bold text-white leading-tight truncate max-w-xs">{job.description}</span>
@@ -88,13 +93,22 @@ const AdminJobOversight = () => {
                       </div>
                     </td>
                     <td className="px-8 py-5">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider border ${
-                        job.status === 'completed' ? 'text-green-500 border-green-500' :
-                        job.status === 'in_progress' ? 'text-blue-500 border-blue-500' :
-                        'text-neutral-500 border-neutral-800'
-                      }`}>
-                        {job.status}
-                      </span>
+                      <div className="flex flex-col gap-1.5">
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider border w-fit ${
+                          job.status === 'completed' ? 'text-green-500 border-green-500' :
+                          job.status === 'in_progress' ? 'text-blue-500 border-blue-500' :
+                          'text-neutral-500 border-neutral-800'
+                        }`}>
+                          {job.status}
+                        </span>
+                        {job.status === 'completed' && (
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider border w-fit ${
+                            job.is_paid ? 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' : 'text-rose-400 border-rose-500/30 bg-rose-500/10'
+                          }`}>
+                            {job.is_paid ? 'PAID' : 'UNPAID'}
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="px-8 py-5 font-mono text-white">
                       ₹{job.contract_hourly_rate || 0}/hr

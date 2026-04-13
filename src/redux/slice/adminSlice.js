@@ -70,11 +70,12 @@ export const toggleEmployerBlock = createAsyncThunk(
 // 6. Fetch All Jobs
 export const fetchJobs = createAsyncThunk(
     "admin/fetchJobs",
-    async ({ page = 1, status = "" } = {}, thunkAPI) => {
+    async ({ page = 1, status = "", search = "" } = {}, thunkAPI) => {
         try {
-            const url = status 
-                ? `admin-interface/get-jobs/?page=${page}&status=${status}` 
-                : `admin-interface/get-jobs/?page=${page}`;
+            let url = `admin-interface/get-jobs/?page=${page}`;
+            if (status) url += `&status=${status}`;
+            if (search) url += `&search=${search}`;
+            
             const resp = await api.get(url);
             return resp.data;
         } catch (err) {
@@ -86,10 +87,13 @@ export const fetchJobs = createAsyncThunk(
 // 7. Fetch All Financials
 export const fetchFinancials = createAsyncThunk(
     "admin/fetchFinancials",
-    async (_, thunkAPI) => {
+    async ({ page = 1, search = "" } = {}, thunkAPI) => {
         try {
-            const resp = await api.get("admin-interface/get-financials/");
-            return resp.data.result;
+            const url = search 
+                ? `admin-interface/get-financials/?page=${page}&search=${search}` 
+                : `admin-interface/get-financials/?page=${page}`;
+            const resp = await api.get(url);
+            return resp.data;
         } catch (err) {
             return thunkAPI.rejectWithValue(err.response?.data || "Failed to fetch financials");
         }
@@ -109,6 +113,11 @@ const adminSlice = createSlice({
             totalCount: 0,
         },
         financials: [],
+        financialsPagination: {
+            currentPage: 1,
+            totalPages: 1,
+            totalCount: 0,
+        },
         loading: false,
         error: null,
         searchQuery: ""
@@ -149,7 +158,12 @@ const adminSlice = createSlice({
             })
             // Financials
             .addCase(fetchFinancials.fulfilled, (state, action) => {
-                state.financials = action.payload;
+                state.financials = action.payload.result;
+                state.financialsPagination = {
+                    currentPage: action.payload.current_page,
+                    totalPages: action.payload.total_pages,
+                    totalCount: action.payload.count,
+                };
             })
             // Toggle Block
             .addCase(toggleWorkerBlock.fulfilled, (state, action) => {

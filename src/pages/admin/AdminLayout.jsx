@@ -72,7 +72,7 @@ const AdminLayout = () => {
                 value={searchQuery}
                 onChange={(e) => dispatch(setSearchQuery(e.target.value))}
                 className="w-full bg-neutral-900 border-none rounded-md py-2 pl-10 pr-4 text-sm text-white focus:ring-1 focus:ring-neutral-700 transition-all placeholder:text-neutral-600"
-                placeholder="Search platform data..."
+                placeholder="Search by name, company, or Job ID..."
               />
             </div>
           </div>
