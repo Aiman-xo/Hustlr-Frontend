@@ -33,7 +33,7 @@ export const SetJobEstimateTime = createAsyncThunk(
     'set-JobEstimateTime',
     async ({ jobRequestId, estimate_time }, thunkApi) => {
         try {
-            await api.patch(`job-request-handle/${jobRequestId}/`, { 'estimated_hours': estimate_time })
+            await api.patch(`job-request-induvidual/${jobRequestId}/`, { 'estimated_hours': estimate_time })
         } catch (error) {
             return thunkApi.rejectWithValue(error?.response?.data)
         }
@@ -54,9 +54,18 @@ export const StartJob = createAsyncThunk(
 
 export const FinishJob = createAsyncThunk(
     'worker/finish-job',
-    async ({ jobRequestId, material_amount }, thunkApi) => {
+    async ({ jobRequestId, material_amount, bill_image }, thunkApi) => {
         try {
-            const resp = await api.post(`job-request-handle/${jobRequestId}/`, { action: 'finish', material_amount });
+            const formData = new FormData();
+            formData.append('action', 'finish');
+            formData.append('material_amount', material_amount);
+            if (bill_image) {
+                formData.append('bill_image', bill_image);
+            }
+
+            const resp = await api.post(`job-request-handle/${jobRequestId}/`, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
             return { ...resp.data, jobRequestId };
         } catch (error) {
             return thunkApi.rejectWithValue(error?.response?.data);
@@ -127,6 +136,54 @@ export const GetJobMaterials = createAsyncThunk(
     }
 )
 
+export const FetchJobFeed = createAsyncThunk(
+    'worker/fetch-job-feed',
+    async (_, thunkApi) => {
+        try {
+            const resp = await api.get('fetch-job-posts/');
+            return resp.data;
+        } catch (error) {
+            return thunkApi.rejectWithValue(error?.response?.data);
+        }
+    }
+)
+
+export const SendInterest = createAsyncThunk(
+    'worker/send-interest',
+    async (postId, thunkApi) => {
+        try {
+            await api.post(`sending-interest/${postId}/`);
+            return postId;
+        } catch (error) {
+            return thunkApi.rejectWithValue(error?.response?.data);
+        }
+    }
+)
+
+export const FetchWorkerAnalytics = createAsyncThunk(
+    'worker/fetch-analytics',
+    async (_, thunkApi) => {
+        try {
+            const resp = await api.get('worker-analytics/');
+            return resp.data;
+        } catch (error) {
+            return thunkApi.rejectWithValue(error?.response?.data);
+        }
+    }
+)
+
+export const FetchJobDetailWorker = createAsyncThunk(
+    'worker/fetch-job-detail',
+    async (jobRequestId, thunkApi) => {
+        try {
+            const resp = await api.get(`job-request-induvidual/${jobRequestId}/`);
+            return resp.data;
+        } catch (error) {
+            return thunkApi.rejectWithValue(error?.response?.data);
+        }
+    }
+)
+
 const WorkerSlice = createSlice({
     name: "worker-slice",
     initialState: {
@@ -137,7 +194,11 @@ const WorkerSlice = createSlice({
         AllNotifications: [],
         unreadCount: null,
         activeJobs: null,
-        materialNotes: []
+        materialNotes: [],
+        jobFeed:[],
+        feedLoading: false,
+        analytics: null,
+        selectedJobDetail: null,
     },
     extraReducers: (builder) => {
         builder
@@ -486,6 +547,49 @@ const WorkerSlice = createSlice({
                     const activeIndex = state.activeJobs.findIndex(job => job.id === jobRequestId);
                     if (activeIndex !== -1) state.activeJobs[activeIndex].status = new_status;
                 }
+            })
+        builder
+            .addCase(FetchJobFeed.pending, (state) => {
+                state.feedLoading = true;
+            })
+            .addCase(FetchJobFeed.fulfilled, (state, action) => {
+                state.feedLoading = false;
+                state.jobFeed = action.payload;
+            })
+            .addCase(FetchJobFeed.rejected, (state) => {
+                state.feedLoading = false;
+            })
+        builder
+            .addCase(SendInterest.fulfilled, (state, action) => {
+                // Mark the post as "interested" in state so button updates instantly
+                const postId = action.payload;
+                const post = state.jobFeed.find(p => p.id === postId);
+                if (post) post.already_interested = true;
+            })
+        builder
+            .addCase(FetchWorkerAnalytics.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(FetchWorkerAnalytics.fulfilled, (state, action) => {
+                state.loading = false;
+                state.analytics = action.payload;
+            })
+            .addCase(FetchWorkerAnalytics.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Failed to fetch analytics";
+            })
+        builder
+            .addCase(FetchJobDetailWorker.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(FetchJobDetailWorker.fulfilled, (state, action) => {
+                state.loading = false;
+                state.selectedJobDetail = action.payload;
+            })
+            .addCase(FetchJobDetailWorker.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Failed to fetch job details";
             })
     }
 })

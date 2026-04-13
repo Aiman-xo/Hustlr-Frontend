@@ -2,8 +2,9 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-// Import the action you'll create in your slice later
-// import { addNotification } from '../redux/notificationSlice'; 
+import { FetchActiveJobs, GetJobMaterials, FetchJobInbox, FetchNotifications } from '../redux/slice/workerSlice';
+import { SeeJobRequests, FetchInterestRequests } from '../redux/slice/employerSlice';
+import { useSelector } from 'react-redux';
 
 export const useNotificationSocket = (userId) => {
   const dispatch = useDispatch();
@@ -26,26 +27,39 @@ export const useNotificationSocket = (userId) => {
 
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      
+
       // 1. Update Redux State (Commented out until you have your slice ready)
       // dispatch(addNotification(data));
 
+      const title = data.title || data.payload?.title || "Notification";
+      const message = data.message || data.payload?.message || JSON.stringify(data);
+
       // 2. Trigger React-Toastify
-      // In Toastify, we usually combine title and message or use a custom component
       toast.success(
         <div>
-          <strong>{data.title}</strong>
-          <div>{data.message}</div>
-        </div>, 
+          <strong>{title}</strong>
+          <div>{message}</div>
+        </div>,
         {
           position: "top-right",
           autoClose: 8000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
         }
       );
+
+      // 3. Trigger refreshing of lists
+      const type = data.type || data.payload?.type;
+      if (type) {
+        dispatch(FetchActiveJobs());
+        dispatch(FetchJobInbox());
+        dispatch(SeeJobRequests({ status: '', page: 1 }));
+        dispatch(FetchInterestRequests());
+        dispatch(FetchNotifications());
+
+        // Specialized refresh for material toggles
+        if (type === 'MATERIAL_TOGGLE' && (data.job_id || data.payload?.job_id)) {
+          dispatch(GetJobMaterials(data.job_id || data.payload?.job_id));
+        }
+      }
     };
 
     socket.onerror = (error) => {

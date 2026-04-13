@@ -6,6 +6,7 @@ import {useNavigate,useParams} from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { GoogleAuth } from '../../redux/slice/authSlice';
 import { useGoogleLogin } from '@react-oauth/google';
+import { requestAndSaveToken } from '../../firebase/firebase-config';
 
 function Register() {
     const dispatch = useDispatch()
@@ -31,7 +32,13 @@ function Register() {
         if (!formData.email.trim()) {
             setLocalError("Email is required");
             return;
-          }
+        }
+
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9-]{2,}\.)+[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(formData.email)) {
+            setLocalError("Please enter a valid email address (e.g. name@gmail.com)");
+            return;
+        }
         
         if (!formData.password.trim()) {
             setLocalError("Password is required");
@@ -62,6 +69,10 @@ function Register() {
     useEffect(() => {
         console.log("Redirect Check - Auth:", isAuthenticated, "Role:", role, "isNewUser:", isNewUser);
         if (!isAuthenticated || !role) return;
+
+        if (role === "worker" || role === "employer") {
+          requestAndSaveToken(); // This runs in the background
+        }
 
         if(isNewUser){
             if (role === "worker") {
@@ -156,6 +167,7 @@ function Register() {
                 placeholder="name@gmail.com" 
                 value={formData.email}
                 onChange={(e)=>setFormData({...formData, email:e.target.value})}
+                onFocus={() => setLocalError('')}
                 type="email" 
               />
             </div>
@@ -172,6 +184,7 @@ function Register() {
                 placeholder="••••••••"
                 value={formData.password} 
                 onChange={(e)=>setFormData({...formData, password:e.target.value})}
+                onFocus={() => setLocalError('')}
                 type="password" 
               />
             </div>
@@ -189,6 +202,7 @@ function Register() {
                 type="password" 
                 value={formData.confirm_password} 
                 onChange={(e)=>setFormData({...formData, confirm_password:e.target.value})}
+                onFocus={() => setLocalError('')}
               />
               {formData.confirm_password && formData.password === formData.confirm_password && (
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center text-[#89cf07]">

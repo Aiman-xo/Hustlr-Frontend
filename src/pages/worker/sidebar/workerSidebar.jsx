@@ -40,6 +40,11 @@ const Sidebar = () => {
         <span>My Jobs</span>
       </NavLink>
 
+      <NavLink to="/worker/job-feed" className={getLinkClass}>
+        <span className="material-symbols-outlined text-base">travel_explore</span>
+        <span>Find Jobs</span>
+      </NavLink>
+
       <NavLink to="/worker/payouts" className={getLinkClass}>
         <span className="material-symbols-outlined text-base">account_balance_wallet</span>
         <span>Payouts</span>

@@ -1,20 +1,29 @@
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../../../redux/slice/authSlice';
-
-const navItems = [
-  { to: '/employer/dashboard', icon: 'dashboard', label: 'Dashboard' },
-  { to: '/employer/works', icon: 'work', label: 'Works' },
-  { to: '/employer/works/requests', icon: 'pending_actions', label: 'Work Requests' },
-  { to: '/employer/payments', icon: 'payments', label: 'Payments' },
-  { to: '/employer/messages', icon: 'chat_bubble', label: 'Messages' },
-  { to: '/employer/profile', icon: 'settings', label: 'Settings' },
-];
+import { FetchInterestRequests } from '../../../redux/slice/employerSlice';
 
 const EmployerSidebar = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { interestRequests } = useSelector(state => state.employer);
   const [isWorker, setIsWorker] = useState(false);
+
+  useEffect(() => {
+    dispatch(FetchInterestRequests());
+  }, [dispatch]);
+
+  const navItems = [
+    { to: '/employer/dashboard', icon: 'dashboard', label: 'Dashboard' },
+    { to: '/employer/my-posts', icon: 'grid_view', label: 'My Posts' },
+    { to: '/employer/works', icon: 'work', label: 'Works' },
+    { to: '/employer/works/requests', icon: 'pending_actions', label: 'Work Requests' },
+    { to: '/employer/received-requests', icon: 'move_to_inbox', label: 'Received Requests', badge: interestRequests.length > 0 ? interestRequests.length : null },
+    { to: '/employer/payments', icon: 'payments', label: 'Payments' },
+    { to: '/employer/messages', icon: 'chat_bubble', label: 'Messages' },
+    { to: '/employer/profile', icon: 'settings', label: 'Settings' },
+  ];
 
   const getLinkClass = ({ isActive }) => {
     const baseClasses =
@@ -38,7 +47,7 @@ const EmployerSidebar = () => {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 py-2 space-y-0.5">
+      <nav className="flex-1 px-3 py-2 space-y-0.5 overflow-y-auto custom-scrollbar">
         {navItems.map(({ to, icon, label, badge }) => (
           <NavLink key={to} to={to} className={getLinkClass} end={to === '/employer/works'}>
             <span className="material-symbols-outlined text-base">{icon}</span>
@@ -67,7 +76,10 @@ const EmployerSidebar = () => {
       <div className="p-5 border-t border-[#e2e6db]">
 
         {/* Post a Job CTA */}
-        <button className="w-full mb-4 py-2.5 px-3 bg-[#8ad007] hover:bg-[#8ad007]/90 text-white text-xs font-bold rounded-lg flex items-center justify-center gap-2 shadow-md shadow-[#8ad007]/20 transition-all active:scale-95">
+        <button
+          onClick={() => navigate('/employer/post-job')}
+          className="w-full mb-4 py-2.5 px-3 bg-[#8ad007] hover:bg-[#8ad007]/90 text-white text-xs font-bold rounded-lg flex items-center justify-center gap-2 shadow-md shadow-[#8ad007]/20 transition-all active:scale-95"
+        >
           <span className="material-symbols-outlined text-base">add_circle</span>
           <span>Post a Job</span>
         </button>

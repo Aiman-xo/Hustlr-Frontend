@@ -82,8 +82,8 @@ const MaterialModal = ({ isOpen, onClose, onConfirm, jobId, primary = "#8ad007",
             ) : (
               <div className="space-y-1">
                 {draftItems.map((item, idx) => (
-                  <div key={idx} className="flex items-center justify-between bg-white px-3 py-2 rounded-md shadow-sm border border-slate-100">
-                    <span className="text-slate-700 text-xs font-medium">{item.item_description}</span>
+                   <div key={idx} className="flex items-center justify-between bg-white px-3 py-2 rounded-md shadow-sm border border-slate-100 gap-2">
+                    <span className="text-slate-700 text-xs font-medium break-words whitespace-pre-wrap flex-1">{item.item_description}</span>
                     <button onClick={() => handleRemoveItem(idx)} className="text-slate-300 hover:text-red-500 transition-colors">
                       <span className="material-symbols-outlined text-base">delete</span>
                     </button>

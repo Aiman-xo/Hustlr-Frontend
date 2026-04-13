@@ -1,6 +1,7 @@
 import { FetchActiveJobs, SetJobEstimateTime, SendJobMaterials, GetJobMaterials, StartJob, FinishJob } from "../../redux/slice/workerSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import MaterialModal from "./Modals/JobMaterialSendingModal";
 import Timer from "../../components/Timer";
 import BillingModal from "./Modals/BillingModal";
@@ -68,6 +69,12 @@ const IconSVG = ({ name }) => {
         <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
       </svg>
     ),
+    visibility: (
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+        <circle cx="12" cy="12" r="3" />
+      </svg>
+    ),
   };
   return icons[name] || null;
 };
@@ -81,7 +88,11 @@ const JobCard = ({ job, onUpdateEstimate }) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showBillingModal, setShowBillingModal] = useState(false);
+  const [basepay,setBasePay] = useState();
   const [calculatedLabor, setCalculatedLabor] = useState(0);
+  const [localError, setLocalError] = useState(null);
+  const [showStartConfirm, setShowStartConfirm] = useState(false);
+  const navigate = useNavigate();
 
   const dispatch = useDispatch()
   const { loading, error, materialNotes } = useSelector((state) => state.worker)
@@ -90,27 +101,43 @@ const JobCard = ({ job, onUpdateEstimate }) => {
     // Pre-fill with current number if it exists
     const currentHours = job.estimated_hours || "";
     setInputVal(currentHours.toString());
+    setLocalError(null); // Clear error when editing
     setIsEditing(true);
   };
 
 
   const handleSend = async () => {
     const trimmed = inputVal.trim();
-    if (!trimmed || isNaN(trimmed)) return;
+    if (!trimmed || isNaN(trimmed)) {
+      setLocalError("Please enter a valid number");
+      return;
+    }
+
+    const val = parseFloat(trimmed);
+    if (val <= 0) {
+      setLocalError("Estimated time must be greater than 0");
+      return;
+    }
+    
+    if (trimmed.replace('.', '').length > 4 || val > 9999) {
+      setLocalError("Estimated time cannot exceed 4 digits");
+      return;
+    }
 
     setIsUpdating(true); // Disable UI during API call
+    setLocalError(null);
     try {
       // Trigger the Thunk provided in your prompt
       await dispatch(SetJobEstimateTime({
         jobRequestId: job.id,
-        estimate_time: parseFloat(trimmed)
+        estimate_time: val
       })).unwrap();
 
       // Re-fetch jobs so the UI shows the new data from the DB
       dispatch(FetchActiveJobs());
       setIsEditing(false);
-    } catch (error) {
-      //none
+    } catch (err) {
+      setLocalError(typeof err === "string" ? err : (err?.detail || err?.message || "Failed to update estimate"));
     } finally {
       setIsUpdating(false);
     }
@@ -138,13 +165,23 @@ const JobCard = ({ job, onUpdateEstimate }) => {
     if (e.key === "Escape") setIsEditing(false);
   };
 
-  const handleStart = async () => {
+  const handleStart = () => {
+    if (!job.estimated_hours || parseFloat(job.estimated_hours) <= 0) {
+      setLocalError("Please set estimate time before starting");
+      return;
+    }
+    setLocalError(null);
+    setShowStartConfirm(true);
+  };
+
+  const confirmStart = async () => {
+    setShowStartConfirm(false);
     setIsUpdating(true);
     try {
       await dispatch(StartJob(job.id)).unwrap();
       dispatch(FetchActiveJobs());
     } catch (err) {
-      console.error("Start failed:", err);
+      setLocalError(typeof err === "string" ? err : (err?.detail || err?.message || "Failed to start job"));
     } finally {
       setIsUpdating(false);
     }
@@ -161,10 +198,14 @@ const JobCard = ({ job, onUpdateEstimate }) => {
     }
   };
 
-  const handleFinishConfirm = async (materialAmount) => {
+  const handleFinishConfirm = async (materialAmount, billImage) => {
     setIsUpdating(true);
     try {
-      await dispatch(FinishJob({ jobRequestId: job.id, material_amount: materialAmount })).unwrap();
+      await dispatch(FinishJob({
+        jobRequestId: job.id,
+        material_amount: materialAmount,
+        bill_image: billImage
+      })).unwrap();
       setShowBillingModal(false);
       dispatch(FetchActiveJobs());
     } catch (err) {
@@ -272,7 +313,13 @@ const JobCard = ({ job, onUpdateEstimate }) => {
                     placeholder="No. of hours"
                     value={inputVal}
                     disabled={loading} // Use Redux loading
-                    onChange={(e) => setInputVal(e.target.value)}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (val.replace('.', '').length <= 4) {
+                        setInputVal(val);
+                      }
+                    }}
+                    onFocus={() => setLocalError(null)}
                     onKeyDown={handleKeyDown}
                     style={{
                       width: "100%",
@@ -290,10 +337,10 @@ const JobCard = ({ job, onUpdateEstimate }) => {
                     }}
                   />
 
-                  {/* Error Message from Redux */}
-                  {error && (
+                  {/* Error Message isolated to this card */}
+                  {localError && (
                     <span style={{ color: "#e63946", fontSize: "9px", fontWeight: 600 }}>
-                      {error}
+                      {localError}
                     </span>
                   )}
 
@@ -564,7 +611,7 @@ const JobCard = ({ job, onUpdateEstimate }) => {
               }}
             >
               {job.tasks.map((task) => (
-                <div key={task.id} style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <div key={task.id} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
                   <input
                     type="checkbox"
                     defaultChecked={task.done}
@@ -576,6 +623,7 @@ const JobCard = ({ job, onUpdateEstimate }) => {
                       cursor: "pointer",
                       borderRadius: "4px",
                       flexShrink: 0,
+                      marginTop: 2
                     }}
                   />
                   <label
@@ -586,6 +634,8 @@ const JobCard = ({ job, onUpdateEstimate }) => {
                       textDecoration: task.done ? "line-through" : "none",
                       cursor: "pointer",
                       transition: "color 0.15s",
+                      wordBreak: "break-word",
+                      whiteSpace: "pre-wrap"
                     }}
                   >
                     {task.label}
@@ -599,7 +649,7 @@ const JobCard = ({ job, onUpdateEstimate }) => {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <div style={{ display: "flex", gap: "6px" }}>
               {[
-                { icon: "upload", label: "Upload Bill" },
+                { icon: "visibility", label: "View Details" },
                 { icon: "note", label: "Send Note" },
               ].map(({ icon, label }) => (
                 <button
@@ -607,8 +657,10 @@ const JobCard = ({ job, onUpdateEstimate }) => {
                   onClick={() => {
                     if (label === "Send Note") {
                       setOpen(true);
+                    } else if (label === "View Details") {
+                      navigate(`/worker/job-detail/${job.id}`);
                     } else {
-                      console.log("Upload Bill clicked");
+                      console.log("Other action clicked");
                     }
                   }}
                   style={{
@@ -679,8 +731,8 @@ const JobCard = ({ job, onUpdateEstimate }) => {
             </div>
           </div>
         </div>
-        {(error) && (
-          <p className="mt-2 text-[9px] text-red-500 text-center font-bold uppercase">{error}</p>
+        {(localError) && (
+          <p className="mt-2 text-[9px] text-red-500 text-center font-bold uppercase">{localError}</p>
         )}
       </div>
       {/* Place this at the end of the JobCard JSX */}
@@ -698,7 +750,32 @@ const JobCard = ({ job, onUpdateEstimate }) => {
         onConfirm={handleFinishConfirm}
         laborAmount={calculatedLabor}
         isLoading={isUpdating}
+        basePay={job.basePay}
       />
+      
+      {/* Start Session Confirmation Modal */}
+      {showStartConfirm && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.2)', backdropFilter: 'blur(8px)' }}>
+          <div style={{ background: 'rgba(255, 255, 255, 0.8)', border: '1px solid rgba(255, 255, 255, 0.3)', padding: '24px', borderRadius: '24px', width: '320px', textAlign: 'center', boxShadow: '0 8px 32px rgba(0,0,0,0.1)' }}>
+            <h4 style={{ margin: '0 0 8px', fontSize: '18px', fontWeight: 800 }}>Start Session?</h4>
+            <p style={{ margin: '0 0 24px', fontSize: '13px', color: '#71717a' }}>Are you sure you want to start the work session for "{job.title}"?</p>
+            <div style={{ display: 'flex', gap: 10 }}>
+              <button 
+                onClick={() => setShowStartConfirm(false)} 
+                style={{ flex: 1, padding: '10px', borderRadius: '12px', border: '1px solid #e4e4e7', background: '#fff', cursor: 'pointer', fontWeight: 600, fontSize: '12px' }}
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={confirmStart} 
+                style={{ flex: 1, padding: '10px', borderRadius: '12px', border: 'none', background: primary, color: '#fff', cursor: 'pointer', fontWeight: 600, fontSize: '12px' }}
+              >
+                Start
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -731,6 +808,20 @@ export default function MyJobs() {
     setJobs((prev) =>
       prev.map((j) => (j.id === jobId ? { ...j, estimatedTime: newLabel } : j))
     );
+  };
+
+  const getSessionDuration = (start, end) => {
+    if (!start || !end) return "00:00:00";
+  
+    const startTime = new Date(start);
+    const endTime = new Date(end);
+  
+    const diffMs = endTime - startTime;
+  
+    const hours = Math.floor(diffMs / (1000 * 60 * 60));
+    const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+  
+    return `${hours}h ${minutes}m`;
   };
 
   return (
@@ -831,7 +922,7 @@ export default function MyJobs() {
                   ...job,
                   title: job.description || "No Description Provided",
                   estimatedTime: job.estimated_hours ? `Est. ${job.estimated_hours} hours` : "Set Estimate",
-                  sessionDuration: "00:00:00",
+                  sessionDuration: getSessionDuration(job.start_time, job.end_time),
                   startedAt: `Location: ${job.city}`,
                   // 3. Transform the filtered notes into the tasks format the JobCard expects
                   tasks: relevantNotes.map(note => ({

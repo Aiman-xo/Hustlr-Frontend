@@ -27,7 +27,8 @@ export const registerUser = createAsyncThunk(
         isNewUser: resp.data.is_new_user,
         role: decoded.role,
         email: decoded.email,
-        date_joined: decoded.date_joined
+        date_joined: decoded.date_joined,
+        isProfileSetup: decoded.is_profile_setup
       }
 
     }
@@ -62,7 +63,8 @@ export const loginUser = createAsyncThunk(
         isNewUser: resp.data.is_new_user,
         role: decoded.role,
         email: decoded.email,
-        date_joined: decoded.date_joined
+        date_joined: decoded.date_joined,
+        isProfileSetup: decoded.is_profile_setup
       }
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data);
@@ -103,6 +105,7 @@ export const initAuth = createAsyncThunk(
       role: decoded.role,
       email: decoded.email,
       date_joined: decoded.date_joined,
+      isProfileSetup: decoded.is_profile_setup
     };
   }
 );
@@ -130,7 +133,8 @@ export const GoogleAuth = createAsyncThunk(
         isNewUser: resp.data.is_new_user,
         role: decoded.role,
         email: decoded.email,
-        date_joined: decoded.date_joined
+        date_joined: decoded.date_joined,
+        isProfileSetup: decoded.is_profile_setup
       }
     }
     catch (error) {
@@ -167,6 +171,7 @@ const authSlice = createSlice({
     email: null,
     date_joined: null,
     isAuthenticated: false,
+    isProfileSetup: false,
 
     authInitialized: false,
     isRefreshing: false,
@@ -182,13 +187,14 @@ const authSlice = createSlice({
     updateAccessToken: (state, action) => {
       const token = action.payload;
       try {
-        const decoded = jwtDecode(token); // 1. Decode the new token
+        const decoded = jwtDecode(token); 
 
         state.access_token = token;
-        state.role = decoded.role;       // 2. Restore the role!
-        state.email = decoded.email;      // 3. Restore the email
-        state.date_joined = decoded.date_joined;
-        state.user = { ...state.user, id: decoded.user_id };
+        state.role = decoded.role || "worker";
+        state.email = decoded.email || "";
+        state.date_joined = decoded.date_joined || "";
+        state.isProfileSetup = decoded.is_profile_setup || false;
+        state.user = { id: decoded.id || decoded.user_id };
 
         state.isAuthenticated = true;
         state.isRefreshing = false;
@@ -215,6 +221,7 @@ const authSlice = createSlice({
         state.role = action.payload.role
         state.email = action.payload.email
         state.date_joined = action.payload.date_joined
+        state.isProfileSetup = action.payload.isProfileSetup
         state.isAuthenticated = true
       })
       .addCase(registerUser.rejected, (state, action) => {
@@ -265,6 +272,7 @@ const authSlice = createSlice({
         state.role = action.payload.role;
         state.email = action.payload.email;
         state.date_joined = action.payload.date_joined;
+        state.isProfileSetup = action.payload.isProfileSetup;
         state.isAuthenticated = true;
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -308,6 +316,7 @@ const authSlice = createSlice({
         state.email = action.payload.email;
         state.user = { id: action.payload.id };
         state.date_joined = action.payload.date_joined;
+        state.isProfileSetup = action.payload.isProfileSetup;
         state.isAuthenticated = true;
       })
       .addCase(initAuth.rejected, (state) => {
@@ -323,6 +332,7 @@ const authSlice = createSlice({
         state.email = null;
         state.date_joined = null;
         state.isAuthenticated = false;
+        state.isProfileSetup = false;
         state.error = null;
 
         localStorage.removeItem("access_token");
@@ -341,6 +351,7 @@ const authSlice = createSlice({
         state.role = action.payload.role
         state.email = action.payload.email
         state.date_joined = action.payload.date_joined
+        state.isProfileSetup = action.payload.isProfileSetup
         state.isAuthenticated = true
       })
       .addCase(GoogleAuth.rejected, (state, action) => {

@@ -2,7 +2,7 @@
 
 import { SeeJobRequests, CancelJobRequest, AcceptJobStart } from "../../redux/slice/employerSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import Spinner from "../publilc/Spinner";
 import Timer from "../../components/Timer";
 
@@ -37,6 +37,7 @@ function RequestCard({ req }) {
   }
 
   const [isAccepting, setIsAccepting] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
 
   const handleAcceptStart = async (jobId) => {
     setIsAccepting(true);
@@ -50,8 +51,43 @@ function RequestCard({ req }) {
     }
   };
 
+  const handleConfirmCancel = async () => {
+    setShowCancelModal(false);
+    await handleCancelRequest(req.id);
+  };
+
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex flex-col md:flex-row">
+    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex flex-col md:flex-row relative">
+      {/* Cancel Confirmation Modal */}
+      {showCancelModal && (
+        <div 
+          className="absolute inset-0 z-50 bg-black/15 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center animate-in fade-in zoom-in duration-200"
+          style={{ borderRadius: '1rem' }}
+        >
+          <div className="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center mb-4">
+            <span className="material-symbols-outlined text-red-500" style={{ fontSize: '24px' }}>warning</span>
+          </div>
+          <h4 className="text-sm font-extrabold text-gray-900 mb-2">Cancel Job Request?</h4>
+          <p className="text-[11px] text-gray-500 mb-6 max-w-[200px]">
+            Are you sure you want to cancel this request? This action cannot be undone.
+          </p>
+          <div className="flex gap-3 w-full max-w-[240px]">
+            <button 
+              onClick={() => setShowCancelModal(false)}
+              className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-bold text-[10px] transition-all cursor-pointer uppercase tracking-wider"
+            >
+              Go Back
+            </button>
+            <button 
+              onClick={handleConfirmCancel}
+              className="flex-1 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl font-bold text-[10px] transition-all cursor-pointer uppercase tracking-wider shadow-lg shadow-red-200"
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Image Panel */}
       <div className="w-full md:w-56 h-36 md:h-auto bg-gray-100 relative group flex-shrink-0 cursor-pointer">
         {req.project_image ? (
@@ -171,7 +207,7 @@ function RequestCard({ req }) {
             <h4 className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">
               Job Description
             </h4>
-            <p className="text-gray-500 leading-relaxed text-xs">
+            <p className="text-gray-500 leading-relaxed text-xs break-words whitespace-pre-wrap">
               {req.description}
             </p>
           </div>
@@ -186,7 +222,7 @@ function RequestCard({ req }) {
                       ${isCancelling
                   ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                   : "bg-gray-100 hover:bg-red-500 hover:text-white text-gray-700 cursor-pointer"}`}
-              onClick={() => handleCancelRequest(req.id)}
+              onClick={() => setShowCancelModal(true)}
             >
               {isCancelling ? (
                 <>
@@ -328,7 +364,7 @@ export default function WorkRequests() {
             <button
               key={tab.value}
               onClick={() => handleFilterChange(tab.value)}
-              className="px-4 py-2 border rounded-xl font-bold text-xs shadow-sm transition-all cursor-pointer"
+              className="px-3 py-1.5 border rounded-lg font-bold text-[10px] shadow-sm transition-all cursor-pointer"
               style={{
                 // Use your primary greenish color when active
                 backgroundColor: currentStatus === tab.value ? "#8ad007" : "white",

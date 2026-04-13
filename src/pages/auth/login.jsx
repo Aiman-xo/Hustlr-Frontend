@@ -6,7 +6,7 @@ import ForgotPasswordModal from './components/ForgotPasswordModal';
 import VerifyOTPModal from './components/VerifyOTPModal';
 import { GoogleAuth } from '../../redux/slice/authSlice';
 import { useGoogleLogin } from '@react-oauth/google';
-
+import { requestAndSaveToken } from '../../firebase/firebase-config';
 
 const HustlrLogin = () => {
     const dispatch = useDispatch()
@@ -30,7 +30,13 @@ const HustlrLogin = () => {
         if (!formData.email.trim()) {
             setLocalError("Email is required");
             return;
-          }
+        }
+        
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9-]{2,}\.)+[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(formData.email)) {
+            setLocalError("Please enter a valid email address (e.g. name@gmail.com)");
+            return;
+        }
         
         if (!formData.password.trim()) {
             setLocalError("Password is required");
@@ -63,6 +69,11 @@ const HustlrLogin = () => {
     useEffect(() => {
         if (!isAuthenticated || !role) return;
       
+        // Request token for both workers and employers
+        if (role === "worker" || role === "employer") {
+          requestAndSaveToken();
+        }
+
         if (role === "worker") {
           navigate("/worker/dashboard", { replace: true });
         } else if (role === "employer") {
@@ -132,6 +143,7 @@ const HustlrLogin = () => {
                         email:e.target.value
                     })
                   }}
+                  onFocus={() => setLocalError('')}
                 />
               </div>
             </div>
@@ -156,6 +168,7 @@ const HustlrLogin = () => {
                         password:e.target.value
                     })
                   }}
+                  onFocus={() => setLocalError('')}
                 />
               </div>
             </div>

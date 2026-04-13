@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useSelector,useDispatch } from 'react-redux';
 import { FetchProfile,ProfileSetup,WorkerProfilePost } from '../../redux/slice/profileSlice';
-import { SaveLocation } from '../../redux/slice/authSlice';
+import { SaveLocation, updateAccessToken } from '../../redux/slice/authSlice';
 import { FetchSkill } from '../../redux/slice/profileSlice';
 import LocationPicker from './LocationPicker';
+import axios from 'axios';
 
 
 
@@ -110,6 +111,12 @@ const WorkerProfileSetup = () => {
         setLocalError('Pleaase fill all the required details!')
         return;
     }
+
+    if (!selectedLocation) {
+        setLocalError('Please pin your location on the map!')
+        return;
+    }
+
     if (workerformData.experience < 0 || workerformData.base_Pay <0 || workerformData.hourly_rate <0){
         setLocalError('cannot set negative')
         return
@@ -135,11 +142,15 @@ const WorkerProfileSetup = () => {
     try{
         await dispatch(ProfileSetup(formData)).unwrap()
         await dispatch(WorkerProfilePost(workerProfileData)).unwrap()
+        await dispatch(SaveLocation(selectedLocation)).unwrap();
 
-        if (selectedLocation) {
-            await dispatch(SaveLocation(selectedLocation)).unwrap();
-        } else {
-            setLocalError("Please pin your location on the map.");
+        try {
+            const resp = await axios.post('http://127.0.0.1/api/token/refresh/', {}, { withCredentials: true });
+            const { access_token } = resp.data;
+            localStorage.setItem('access_token', access_token);
+            dispatch(updateAccessToken(access_token));
+        } catch (refreshErr) {
+            console.error("Failed to refresh token after profile setup", refreshErr);
         }
 
         setRedirecting(true);
@@ -254,6 +265,7 @@ const WorkerProfileSetup = () => {
                 type="text" 
                 value={profileformData.username}
                 onChange={(e) => setProfileFormData({ ...profileformData, username: e.target.value })}
+                onFocus={() => setLocalError('')}
               />
             </div>
           </div>
@@ -269,6 +281,7 @@ const WorkerProfileSetup = () => {
                 type="number" 
                 value={workerformData.hourly_rate}
                 onChange={(e) => setWorkerFormData({ ...workerformData, hourly_rate: e.target.value })}
+                onFocus={() => setLocalError('')}
               />
             </div>
           </div>
@@ -297,6 +310,7 @@ const WorkerProfileSetup = () => {
                 type="tel"
                 value={profileformData.phone_number}
                 onChange={(e) => setProfileFormData({ ...profileformData, phone_number: e.target.value })}
+                onFocus={() => setLocalError('')}
               />
             </div>
           </div>
@@ -312,6 +326,7 @@ const WorkerProfileSetup = () => {
                 type="number" 
                 value={workerformData.base_Pay}
                 onChange={(e) => setWorkerFormData({ ...workerformData, base_Pay: e.target.value })}
+                onFocus={() => setLocalError('')}
               />
             </div>
           </div>
@@ -326,6 +341,7 @@ const WorkerProfileSetup = () => {
                 type="number" 
                 value={workerformData.experience}
                 onChange={(e) => setWorkerFormData({ ...workerformData, experience: e.target.value })}
+                onFocus={() => setLocalError('')}
               />
             </div>
           </div>
@@ -340,6 +356,7 @@ const WorkerProfileSetup = () => {
             rows="3"
             value={workerformData.job_description}
             onChange={(e) => setWorkerFormData({ ...workerformData, job_description: e.target.value })}
+            onFocus={() => setLocalError('')}
           ></textarea>
         </div>
       </section>

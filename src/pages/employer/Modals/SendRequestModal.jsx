@@ -31,12 +31,27 @@ export default function JobRequestModal({ isOpen = true, onClose,workerData}) {
     e.preventDefault();
     setDragOver(false);
     const file = e.dataTransfer.files[0];
-    if (file) setImageFile(file);
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        setLocalError("Only image files are allowed.");
+        return;
+      }
+      setImageFile(file);
+      setLocalError('');
+    }
   };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file) setImageFile(file);
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        setLocalError("Only image files are allowed.");
+        e.target.value = "";
+        return;
+      }
+      setImageFile(file);
+      setLocalError('');
+    }
   };
 
   const handleSend = async () => {
@@ -266,13 +281,13 @@ export default function JobRequestModal({ isOpen = true, onClose,workerData}) {
                     <p style={{ fontSize: "0.68rem", fontWeight: 700, color: "#374151" }}>
                       Click to upload or drag and drop
                     </p>
-                    <p style={{ fontSize: "0.6rem", color: "#9ca3af" }}>PNG, JPG or PDF (max. 10MB)</p>
+                    <p style={{ fontSize: "0.6rem", color: "#9ca3af" }}>PNG or JPG (max. 10MB)</p>
                   </>
                 )}
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept="image/*,.pdf"
+                  accept="image/*"
                   onChange={handleFileChange}
                   style={{ display: "none" }}
                 />

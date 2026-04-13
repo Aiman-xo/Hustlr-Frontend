@@ -192,6 +192,7 @@ const ProfileSetupSlice = createSlice({
             state.skills = action.payload;
         })
         .addCase(FetchSkill.rejected,(state,action)=>{
+            state.loading = false;
             const payload = action.payload;
             // Case 1: Backend sent a string message
             if (typeof payload === "string") {
@@ -231,6 +232,7 @@ const ProfileSetupSlice = createSlice({
             
         })
         .addCase(WorkerProfilePost.rejected,(state,action)=>{
+            state.loading = false;
             const payload = action.payload;
             // Case 1: Backend sent a string message
             if (typeof payload === "string") {
@@ -269,6 +271,7 @@ const ProfileSetupSlice = createSlice({
             state.workerData = action.payload
         })
         .addCase(FetchWorkerProfile.rejected,(state,action)=>{
+            state.loading = false;
             const payload = action.payload;
             // Case 1: Backend sent a string message
             if (typeof payload === "string") {
@@ -355,6 +358,7 @@ const ProfileSetupSlice = createSlice({
             state.employerData = action.payload
         })
         .addCase(FetchEmployerProfile.rejected,(state,action)=>{
+            state.loading = false;
             const payload = action.payload;
             // Case 1: Backend sent a string message
             if (typeof payload === "string") {

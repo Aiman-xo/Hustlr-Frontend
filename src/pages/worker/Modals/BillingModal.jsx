@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 
-const BillingModal = ({ isOpen, onClose, onConfirm, laborAmount, isLoading }) => {
+const BillingModal = ({ isOpen, onClose, onConfirm, laborAmount, isLoading,BasePay }) => {
     const [materialAmount, setMaterialAmount] = useState(0);
+    const [billImage, setBillImage] = useState(null);
+    const [localError, setLocalError] = useState(null);
+    const [amountError, setAmountError] = useState(null);
     const PRIMARY = "#8ad007";
 
     if (!isOpen) return null;
@@ -33,7 +36,9 @@ const BillingModal = ({ isOpen, onClose, onConfirm, laborAmount, isLoading }) =>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '24px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: '#f8fafc', borderRadius: '12px' }}>
                         <span style={{ fontSize: '13px', fontWeight: 700, color: '#64748b' }}>Labor Amount</span>
-                        <span style={{ fontSize: '16px', fontWeight: 800 }}>₹{parseFloat(laborAmount).toFixed(2)}</span>
+                        <span style={{ fontSize: '16px', fontWeight: 800 }}>
+                        {laborAmount ? `₹${parseFloat(laborAmount).toFixed(2)}` : BasePay}
+                        </span>
                     </div>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -43,21 +48,62 @@ const BillingModal = ({ isOpen, onClose, onConfirm, laborAmount, isLoading }) =>
                             <input
                                 type="number"
                                 value={materialAmount}
-                                onChange={(e) => setMaterialAmount(e.target.value)}
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    if (val.replace('.', '').length <= 5) {
+                                        setMaterialAmount(val);
+                                        setAmountError(null);
+                                    } else {
+                                        setAmountError("Amount cannot exceed 5 digits");
+                                    }
+                                }}
+                                onFocus={() => setAmountError(null)}
                                 placeholder="0.00"
                                 style={{
                                     width: '100%',
                                     padding: '12px 12px 12px 28px',
                                     borderRadius: '12px',
-                                    border: '1.5px solid #e2e8f0',
+                                    border: `1.5px solid ${amountError ? '#ef4444' : '#e2e8f0'}`,
                                     fontSize: '15px',
                                     fontWeight: 700,
                                     outline: 'none',
                                     transition: 'border-color 0.2s'
                                 }}
-                                onFocus={(e) => e.target.style.borderColor = PRIMARY}
-                                onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+                                onBlur={(e) => e.target.style.borderColor = amountError ? '#ef4444' : '#e2e8f0'}
                             />
+                            {amountError && <p style={{ color: '#ef4444', fontSize: '10px', fontWeight: 700, marginTop: '4px' }}>{amountError}</p>}
+                        </div>
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                        <label style={{ fontSize: '12px', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Upload Bill / Receipt (Optional)</label>
+                        <div style={{ position: 'relative' }}>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => {
+                                    const file = e.target.files[0];
+                                    if (file && !file.type.startsWith('image/')) {
+                                        setLocalError("Only image files are allowed.");
+                                        setBillImage(null);
+                                        e.target.value = ""; // Reset input
+                                    } else {
+                                        setLocalError(null);
+                                        setBillImage(file);
+                                    }
+                                }}
+                                style={{
+                                    width: '100%',
+                                    padding: '8px 12px',
+                                    borderRadius: '12px',
+                                    border: `1.5px solid ${localError ? '#ef4444' : '#e2e8f0'}`,
+                                    fontSize: '13px',
+                                    fontWeight: 600,
+                                    outline: 'none',
+                                    background: '#f8fafc'
+                                }}
+                            />
+                            {localError && <p style={{ color: '#ef4444', fontSize: '10px', fontWeight: 700, marginTop: '4px' }}>{localError}</p>}
                         </div>
                     </div>
 
@@ -85,8 +131,18 @@ const BillingModal = ({ isOpen, onClose, onConfirm, laborAmount, isLoading }) =>
                         Cancel
                     </button>
                     <button
-                        onClick={() => onConfirm(materialAmount)}
-                        disabled={isLoading}
+                        onClick={() => {
+                            if (parseFloat(materialAmount) < 0) {
+                                setAmountError("Amount cannot be negative");
+                                return;
+                            }
+                            if (materialAmount.toString().replace('.', '').length > 5) {
+                                setAmountError("Amount cannot exceed 5 digits");
+                                return;
+                            }
+                            onConfirm(materialAmount, billImage);
+                        }}
+                        disabled={isLoading || amountError}
                         style={{
                             flex: 2,
                             padding: '12px',

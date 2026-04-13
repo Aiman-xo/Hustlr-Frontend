@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { EmployerProfilePost,FetchEmployerProfile,ProfileSetup,FetchProfile } from '../../redux/slice/profileSlice';
 import { useDispatch,useSelector } from 'react-redux';
 import LocationPicker from '../profile/LocationPicker';
-import { SaveLocation } from '../../redux/slice/authSlice';
+import { SaveLocation, updateAccessToken } from '../../redux/slice/authSlice';
+import axios from 'axios';
 
 
 const EmployerProfileSection= () => {
@@ -82,6 +83,16 @@ const EmployerProfileSection= () => {
             await dispatch(SaveLocation(selectedLocation)).unwrap();
         } else {
             setLocalError("Please pin your location on the map.");
+            return;
+        }
+
+        try {
+            const resp = await axios.post('http://127.0.0.1/api/token/refresh/', {}, { withCredentials: true });
+            const { access_token } = resp.data;
+            localStorage.setItem('access_token', access_token);
+            dispatch(updateAccessToken(access_token));
+        } catch (refreshErr) {
+            console.error("Failed to refresh token after setup", refreshErr);
         }
 
         setRedirecting(true);
@@ -195,6 +206,7 @@ const EmployerProfileSection= () => {
                             company_name:e.target.value
                         })
                     }}
+                    onFocus={() => setLocalError('')}
                   />
                 </div>
               </div>
@@ -215,6 +227,7 @@ const EmployerProfileSection= () => {
                             phone_number:e.target.value
                         })
                     }}
+                    onFocus={() => setLocalError('')}
                   />
                 </div>
               </div>

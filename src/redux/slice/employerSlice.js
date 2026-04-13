@@ -69,6 +69,68 @@ export const AcceptJobStart = createAsyncThunk(
     }
 );
 
+export const PostJob = createAsyncThunk(
+    'employer/post-job',
+    async (formData, thunkAPI) => {
+        try {
+            const resp = await api.post('job-post/', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+            });
+            return resp.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error?.response?.data);
+        }
+    }
+);
+
+export const DeleteJobPost = createAsyncThunk(
+    'employer/delete-job-post',
+    async (postId, thunkAPI) => {
+        try {
+            await api.delete(`job-post-delete/${postId}/`);
+            return postId;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error?.response?.data);
+        }
+    }
+);
+
+export const FetchMyJobPosts = createAsyncThunk(
+    'employer/fetch-job-posts',
+    async (_, thunkAPI) => {
+        try {
+            const resp = await api.get('job-post/');
+            return resp.data.result;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error?.response?.data);
+        }
+    }
+);
+
+export const FetchInterestRequests = createAsyncThunk(
+    'employer/fetch-interest-requests',
+    async (_, thunkAPI) => {
+        try {
+            const resp = await api.get('job-interest-handle/');
+            return resp.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error?.response?.data);
+        }
+    }
+);
+
+export const HandleInterestRequest = createAsyncThunk(
+    'employer/handle-interest-request',
+    async ({ requestId, status }, thunkAPI) => {
+        try {
+            const resp = await api.patch(`job-interest-handle/${requestId}/`, { status });
+            return { id: requestId, status, ...resp.data };
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error?.response?.data);
+        }
+    }
+);
+
 const EmployerSlice = createSlice({
     name: 'Employer-Details-slice',
     initialState: {
@@ -80,7 +142,11 @@ const EmployerSlice = createSlice({
         hasNext: false,
         hasPrevious: false,
         currentPage: 1,
-        currentStatus: ''
+        currentStatus: '',
+        myJobPosts: [],
+        postJobLoading: false,
+        interestRequests: [],
+        interestLoading: false,
     },
     extraReducers: (builder) => {
         builder
@@ -253,6 +319,53 @@ const EmployerSlice = createSlice({
                 if (index !== -1) {
                     state.allJobRequests[index] = updatedJob;
                 }
+            })
+        builder
+            .addCase(PostJob.pending, (state) => {
+                state.postJobLoading = true;
+                state.error = null;
+            })
+            .addCase(PostJob.fulfilled, (state, action) => {
+                state.postJobLoading = false;
+                state.myJobPosts = [action.payload, ...state.myJobPosts];
+            })
+            .addCase(PostJob.rejected, (state, action) => {
+                state.postJobLoading = false;
+                state.error = action.payload || 'Failed to post job.';
+            })
+        builder
+            .addCase(DeleteJobPost.pending, (state) => {
+                state.postJobLoading = true;
+            })
+            .addCase(DeleteJobPost.fulfilled, (state, action) => {
+                state.postJobLoading = false;
+                state.myJobPosts = state.myJobPosts.filter(post => post.id !== action.payload);
+            })
+            .addCase(DeleteJobPost.rejected, (state, action) => {
+                state.postJobLoading = false;
+                state.error = action.payload || 'Failed to delete job post.';
+            })
+        builder
+            .addCase(FetchMyJobPosts.fulfilled, (state, action) => {
+                state.myJobPosts = action.payload;
+            })
+        builder
+            .addCase(FetchInterestRequests.pending, (state) => {
+                state.interestLoading = true;
+            })
+            .addCase(FetchInterestRequests.fulfilled, (state, action) => {
+                state.interestLoading = false;
+                state.interestRequests = action.payload.results || [];
+            })
+            .addCase(FetchInterestRequests.rejected, (state, action) => {
+                state.interestLoading = false;
+                state.error = action.payload || 'Failed to fetch interest requests.';
+            })
+        builder
+            .addCase(HandleInterestRequest.fulfilled, (state, action) => {
+                const { id, status } = action.payload;
+                // Remove from interest requests list once handled (accepted/rejected)
+                state.interestRequests = state.interestRequests.filter(req => req.id !== id);
             })
     }
 })
