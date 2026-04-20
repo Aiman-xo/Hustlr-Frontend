@@ -26,7 +26,7 @@ const chatMiddleware = store => next => action => {
       
       // 4. Connect using the Signed Ticket
       // The WebSocket service will verify this specific ticket for this specific room
-      const socketUrl = `ws://localhost/ws/chat/${roomName}/?token=${chatToken}`;
+      const socketUrl = `${import.meta.env.VITE_WS_URL}/ws/chat/${roomName}/?token=${chatToken}`;
       socket = new WebSocket(socketUrl);
 
       socket.onopen = () => {

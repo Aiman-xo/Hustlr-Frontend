@@ -9,7 +9,7 @@ export const registerUser = createAsyncThunk(
   'auth/register',
   async (userData, thunkAPI) => {
     try {
-      const resp = await axios.post('http://127.0.0.1/api/register/', userData, {
+      const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/register/`, userData, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -43,7 +43,7 @@ export const loginUser = createAsyncThunk(
   async (userData, thunkAPI) => {
 
     try {
-      const resp = await axios.post('http://127.0.0.1/api/login/', userData, {
+      const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/login/`, userData, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -77,7 +77,7 @@ export const logoutUser = createAsyncThunk(
   'auth/logout',
   async (_, thunkAPI) => {
     try {
-      await axios.post('http://127.0.0.1/api/logout/', {}, {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/logout/`, {}, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -114,7 +114,7 @@ export const GoogleAuth = createAsyncThunk(
   'auth/googleauth',
   async ({ code, role }, { rejectWithValue }) => {
     try {
-      const resp = await axios.post('http://127.0.0.1/api/google/auth/', {
+      const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/google/auth/`, {
         code,
         role
       }, {

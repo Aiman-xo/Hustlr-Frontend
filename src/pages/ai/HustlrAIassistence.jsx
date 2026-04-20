@@ -278,7 +278,7 @@ export default function HustlrAIAssistant() {
     try {
       console.log("AI Search Debug:", { query: text.trim(), user_id: user?.id, role: currentRole });
 
-      const res = await axios.get(`http://127.0.0.1/ai/search`, {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/ai/search`, {
         params: {
           query: text.trim(),
           user_id: user?.id,

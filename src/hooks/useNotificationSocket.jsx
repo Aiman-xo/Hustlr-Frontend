@@ -13,9 +13,9 @@ export const useNotificationSocket = (userId) => {
     if (!userId) return;
 
     // Connect to your separate WebSocket service port (e.g., 8001)
-    // Note: Make sure the URL matches your backend (e.g., ws://localhost:8001/ws/notifications/)
+    // Note: The URL is now managed via VITE_WS_URL environment variable (e.g., in .env)
     const token = localStorage.getItem('access_token')
-    const socket = new WebSocket(`ws://localhost/ws/notifications/?token=${token}`);
+    const socket = new WebSocket(`${import.meta.env.VITE_WS_URL}/ws/notifications/?token=${token}`);
 
     socket.onopen = () => {
       console.log("--- FRONTEND: WebSocket Connected Successfully ---");

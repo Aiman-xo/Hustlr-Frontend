@@ -3,7 +3,7 @@ import { setRefreshing,updateAccessToken } from '../redux/slice/authSlice';
 import { store } from '../redux/store';
 
 const api = axios.create({
-    baseURL: 'http://127.0.0.1/api/',
+    baseURL: `${import.meta.env.VITE_API_URL}/api/`,
     withCredentials: true,
 });
 
@@ -55,7 +55,7 @@ api.interceptors.response.use(
 
             try {
                 const resp = await axios.post(
-                    'http://127.0.0.1/api/token/refresh/', 
+                    `${import.meta.env.VITE_API_URL}/api/token/refresh/`, 
                     {}, 
                     { withCredentials: true }
                 );

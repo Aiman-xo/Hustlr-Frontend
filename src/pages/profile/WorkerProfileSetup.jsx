@@ -145,7 +145,7 @@ const WorkerProfileSetup = () => {
         await dispatch(SaveLocation(selectedLocation)).unwrap();
 
         try {
-            const resp = await axios.post('http://127.0.0.1/api/token/refresh/', {}, { withCredentials: true });
+            const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/token/refresh/`, {}, { withCredentials: true });
             const { access_token } = resp.data;
             localStorage.setItem('access_token', access_token);
             dispatch(updateAccessToken(access_token));

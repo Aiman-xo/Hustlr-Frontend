@@ -5,7 +5,7 @@ export const GenerateOTP = createAsyncThunk(
     'generate-otp',
     async (userData,thunkAPI)=>{
         try{
-            const resp = await axios.post('http://127.0.0.1/api/reset/otp/',{
+            const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/reset/otp/`,{
                 email:userData
             },{
                 withCredentials:true
@@ -25,7 +25,7 @@ export const VerifyOTP = createAsyncThunk(
     'verify-otp',
     async (userData,thunkAPI)=>{
         try{
-            await axios.post('http://127.0.0.1/api/verify/otp/',{
+            await axios.post(`${import.meta.env.VITE_API_URL}/api/verify/otp/`,{
                 reset_session:localStorage.getItem('reset_session'),
                 entered_otp:userData
             })
@@ -40,7 +40,7 @@ export const ResetPassword = createAsyncThunk(
     'reset-password',
     async (userData,thunkAPI)=>{
         try{
-            const resp = await axios.post('http://127.0.0.1/api/reset/password/',{
+            const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/reset/password/`,{
                 reset_session:localStorage.getItem('reset_session'),
                 new_password:userData.new_password,
                 confirm_password:userData.confirm_password
