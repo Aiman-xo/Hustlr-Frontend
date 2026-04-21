@@ -64,6 +64,7 @@ function Register() {
         },
         onError: (error) => console.log('Google Login Failed:', error),
         flow: 'auth-code', 
+        redirect_uri: "https://hustlrr.duckdns.org:30443/api/google/auth/"
     });
 
     useEffect(() => {
