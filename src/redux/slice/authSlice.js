@@ -129,7 +129,7 @@ export const GoogleAuth = createAsyncThunk(
       console.log(decoded.id);
 
       return {
-        user: resp.data,
+        user: {...resp.data, id: decoded.id},
         isNewUser: resp.data.is_new_user,
         role: decoded.role,
         email: decoded.email,
@@ -216,6 +216,7 @@ const authSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
         state.message = action.payload.user.message;
+        state.user = action.payload.user
         state.isNewUser = true;
         state.access_token = action.payload.user.access_token
         state.role = action.payload.role
@@ -346,6 +347,7 @@ const authSlice = createSlice({
       })
       .addCase(GoogleAuth.fulfilled, (state, action) => {
         state.loading = false;
+        state.user = action.payload.user
         state.access_token = action.payload.user.access_token
         state.isNewUser = action.payload.isNewUser;
         state.role = action.payload.role

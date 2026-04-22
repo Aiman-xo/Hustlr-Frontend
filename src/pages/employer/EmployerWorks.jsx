@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import Timer from '../../components/Timer';
 import api from '../../api/axiosInstance';
 
+import { toast } from 'react-toastify';
+
 const primary = "#8ad007";
 
 const styles = `
@@ -259,7 +261,7 @@ const EmployerWorks = () => {
 
     const handlePayment = async (job) => {
         if (!job.billing_info?.id) {
-            alert("No billing information available for this job.");
+            toast.error("No billing information available for this job.");
             return;
         }
 
@@ -267,12 +269,12 @@ const EmployerWorks = () => {
             const orderData = await dispatch(CreateRazorpayClient(job.billing_info.id)).unwrap();
             
             if (!orderData?.order_id) {
-                alert("Failed to create payment order. Please try again.");
+                toast.error("Failed to create payment order. Please try again.");
                 return;
             }
 
             if (!window.Razorpay) {
-                alert("Razorpay SDK failed to load. Please check your internet connection.");
+                toast.error("Razorpay SDK failed to load. Please check your internet connection.");
                 return;
             }
 
@@ -293,7 +295,7 @@ const EmployerWorks = () => {
                         dispatch(SeeJobRequests({ status: getStatusForTab(activeTab), page: 1 }));
                     } catch (verifyError) {
                         console.error("Payment verification failed:", verifyError);
-                        alert("Verification failed. Please contact support.");
+                        toast.error("Verification failed. Please contact support.");
                     }
                 },
                 prefill: {
@@ -307,13 +309,13 @@ const EmployerWorks = () => {
             
             rzp.on('payment.failed', function (response) {
                 console.error("Razorpay Payment Failed:", response.error);
-                alert(`Payment failed: ${response.error.description}`);
+                toast.error(`Payment failed: ${response.error.description}`);
             });
 
             rzp.open();
         } catch (error) {
             console.error("Payment initiation failed:", error);
-            alert("Failed to initiate payment. Please try again.");
+            toast.error("Failed to initiate payment. Please try again.");
         }
     };
 
