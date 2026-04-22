@@ -56,8 +56,10 @@ function App() {
     }
   }, [dispatch, authInitialized]);
 
-  useNotificationSocket(user?.id)
-
+  // Only connect the WebSocket AFTER auth has finished initializing
+  // This prevents the race condition where userId is undefined on first render
+  const userId = authInitialized ? user?.id : null;
+  useNotificationSocket(userId);
 
   return (
     <>

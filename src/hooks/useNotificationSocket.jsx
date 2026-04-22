@@ -10,23 +10,32 @@ export const useNotificationSocket = (userId) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!userId) return;
+    console.log(`[NotificationSocket] Hook called with userId: ${userId}`);
+    if (!userId) {
+      console.log('[NotificationSocket] No userId yet, skipping connection.');
+      return;
+    }
 
-    // Connect to your separate WebSocket service port (e.g., 8001)
-    // Note: The URL is now managed via VITE_WS_URL environment variable (e.g., in .env)
-    const token = localStorage.getItem('access_token')
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      console.log('[NotificationSocket] No token in localStorage, skipping connection.');
+      return;
+    }
+
+    console.log(`[NotificationSocket] Connecting for userId: ${userId}`);
     const socket = new WebSocket(`${import.meta.env.VITE_WS_URL}/ws/notifications/?token=${token}`);
 
     socket.onopen = () => {
-      console.log("--- FRONTEND: WebSocket Connected Successfully ---");
+      console.log(`[NotificationSocket] ✅ Connected successfully for userId: ${userId}`);
     };
 
     socket.onclose = (e) => {
-      console.log(`--- FRONTEND: WebSocket Closed. Code: ${e.code}, Reason: ${e.reason} ---`);
+      console.log(`[NotificationSocket] ❌ Closed. Code: ${e.code}, Reason: ${e.reason}`);
     };
 
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
+      console.log('[NotificationSocket] 📩 Message received:', data);
 
       // 1. Update Redux State (Commented out until you have your slice ready)
       // dispatch(addNotification(data));
