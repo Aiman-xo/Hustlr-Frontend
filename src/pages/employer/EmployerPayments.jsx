@@ -14,6 +14,7 @@ export default function EmployerPayments() {
             try {
                 const resp = await api.get('payment-history/');
                 setPayments(resp.data);
+                
             } catch (err) {
                 console.error("Failed to fetch payment history:", err);
             } finally {
@@ -22,6 +23,8 @@ export default function EmployerPayments() {
         };
         fetchHistory();
     }, []);
+
+    console.log(payments);
 
     const filteredPayments = payments.filter(p => 
         p.razorpay_payment_id?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -58,10 +61,10 @@ export default function EmployerPayments() {
                         </div>
                     </div>
                     <div className="flex flex-col gap-2">
-                        <button className="flex items-center justify-center gap-2 min-w-[180px] rounded-none h-11 px-6 bg-[#89d006] text-[#161811] text-xs font-black transition-transform hover:scale-[1.02] active:scale-[0.98] shadow-sm">
+                        <div className="flex items-center justify-center gap-2 min-w-[180px] rounded-none h-11 px-6 bg-[#89d006] text-[#161811] text-xs font-black shadow-sm">
                             <span className="material-symbols-outlined text-base">analytics</span>
                             <span>FINANCIAL REPORT</span>
-                        </button>
+                        </div>
                     </div>
                 </div>
 

@@ -129,7 +129,7 @@ export const GoogleAuth = createAsyncThunk(
       console.log(decoded.id);
 
       return {
-        user: {...resp.data, id: decoded.id},
+        user: { ...resp.data, id: decoded.id },
         isNewUser: resp.data.is_new_user,
         role: decoded.role,
         email: decoded.email,
@@ -187,7 +187,7 @@ const authSlice = createSlice({
     updateAccessToken: (state, action) => {
       const token = action.payload;
       try {
-        const decoded = jwtDecode(token); 
+        const decoded = jwtDecode(token);
 
         state.access_token = token;
         state.role = decoded.role || "worker";
@@ -337,6 +337,9 @@ const authSlice = createSlice({
         state.error = null;
 
         localStorage.removeItem("access_token");
+        localStorage.removeItem("company_name");
+        localStorage.removeItem("profile_image");
+        localStorage.removeItem('username')
       })
 
     //google auth

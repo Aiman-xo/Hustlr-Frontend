@@ -449,17 +449,28 @@ export default function HustlrAIAssistant() {
       {!open && (
         <button
           onClick={() => setOpen(true)}
-          className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-[#89d006] hover:bg-[#7bc005] text-white rounded-2xl shadow-xl shadow-[#89d006]/40 flex items-center justify-center transition-all active:scale-95 hover:scale-105"
+          className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-[#89d006] hover:bg-[#7bc005] text-white rounded-lg shadow-xl shadow-[#89d006]/40 flex items-center justify-center transition-all active:scale-95 hover:scale-105 cursor-pointer group"
           style={{
             animation: pulse ? "fabPulse 2s ease-in-out infinite" : "none",
           }}
           aria-label="Open AI Assistant"
         >
-          <Icons.Bot />
-          {/* Unread badge */}
-          <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center shadow">
-            2
-          </span>
+           <div className="size-9 text-white shrink-0 transition-transform duration-500 group-hover:rotate-[360deg]">
+              <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="w-full h-full fill-current">
+                  <g transform="translate(50, 50)">
+                      <circle cx="0" cy="0" r="6" />
+                      <rect x="-3" y="-28" width="6" height="22" rx="3" />
+                      <rect x="-3" y="6" width="6" height="22" rx="3" />
+                      <rect x="-28" y="-3" width="22" height="6" rx="3" />
+                      <rect x="6" y="-3" width="22" height="6" rx="3" />
+                      <rect x="-3" y="-22" width="6" height="16" rx="3" transform="rotate(45 0 0)" />
+                      <rect x="-3" y="-22" width="6" height="16" rx="3" transform="rotate(135 0 0)" />
+                      <rect x="-3" y="-22" width="6" height="16" rx="3" transform="rotate(225 0 0)" />
+                      <rect x="-3" y="-22" width="6" height="16" rx="3" transform="rotate(315 0 0)" />
+                  </g>
+              </svg>
+          </div>
+          
         </button>
       )}
 

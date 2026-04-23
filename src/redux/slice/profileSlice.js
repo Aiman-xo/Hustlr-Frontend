@@ -7,9 +7,8 @@ export const ProfileSetup = createAsyncThunk(
     'profile-set',
     async (userData,thunkAPI)=>{
         try{
-             await api.post('profile-setup/',userData);
-
-            // return resp.data
+            const resp =  await api.post('profile-setup/',userData);
+            return resp.data
 
         }
         catch(error){
@@ -139,6 +138,10 @@ const ProfileSetupSlice = createSlice({
             state.loading = false
             state.error  = null
             state.profileData = action.payload
+            if (action.payload?.image) {
+                localStorage.setItem('profile_image', action.payload.image)
+            }
+            // localStorage.setItem('username',state.workerData.username)
         })
         .addCase(ProfileSetup.rejected,(state,action)=>{
             state.loading = false
@@ -177,6 +180,10 @@ const ProfileSetupSlice = createSlice({
         .addCase(FetchProfile.fulfilled, (state, action) => {
             state.loading = false;
             state.profileData = action.payload; // This fills your form on page load!
+            if (action.payload?.image) {
+                localStorage.setItem('profile_image', action.payload.image);
+            }
+            localStorage.setItem('username',state.profileData.username)
         })
         .addCase(FetchProfile.rejected, (state, action) => {
             state.loading = false;
@@ -230,6 +237,7 @@ const ProfileSetupSlice = createSlice({
             state.error = null
             // state.workerData = action.payload
             
+            
         })
         .addCase(WorkerProfilePost.rejected,(state,action)=>{
             state.loading = false;
@@ -269,6 +277,7 @@ const ProfileSetupSlice = createSlice({
             state.loading=false,
             state.error = null,
             state.workerData = action.payload
+            
         })
         .addCase(FetchWorkerProfile.rejected,(state,action)=>{
             state.loading = false;
@@ -356,6 +365,9 @@ const ProfileSetupSlice = createSlice({
             state.loading = false,
             state.error =null,
             state.employerData = action.payload
+            if (action.payload?.company_name) {
+                localStorage.setItem('company_name', action.payload.company_name)
+            }
         })
         .addCase(FetchEmployerProfile.rejected,(state,action)=>{
             state.loading = false;

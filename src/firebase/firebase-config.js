@@ -46,10 +46,10 @@ export const requestAndSaveToken = async () => {
           { fcm_token: currentToken },
           // { headers: { Authorization: `Bearer ${accessToken}` } }
         );
-        toast.info("FCM Token synced to Django");
+        console.log("FCM Token synced to Django");
       }
     } catch (error) {
       console.error("Error syncing FCM token:", error);
-      toast.error("couldnt send token!");
+      console.error("couldnt send token!");
     }
   };

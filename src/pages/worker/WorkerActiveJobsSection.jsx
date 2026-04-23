@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import MaterialModal from "./Modals/JobMaterialSendingModal";
 import Timer from "../../components/Timer";
 import BillingModal from "./Modals/BillingModal";
+import { Link } from "react-router-dom";
 
 const primary = "#8ad007";
 
@@ -698,7 +699,7 @@ const JobCard = ({ job, onUpdateEstimate }) => {
             </div>
 
             <div style={{ display: "flex", gap: "6px" }}>
-              {["call", "video", "chat"].map((icon) => (
+              {["chat"].map((icon) => (
                 <button
                   key={icon}
                   style={{
@@ -723,7 +724,9 @@ const JobCard = ({ job, onUpdateEstimate }) => {
                     e.currentTarget.style.color = primary;
                   }}
                 >
+                  <Link to={'/worker/messages'}>
                   <IconSVG name={icon} />
+                  </Link>
                 </button>
 
               ))}
@@ -798,11 +801,11 @@ export default function MyJobs() {
     fetchAllData();
   }, [dispatch]);
 
-  useEffect(() => {
-    if (activeJobs) {
-      console.log(activeJobs);
-    }
-  }, [dispatch, activeJobs])
+  // useEffect(() => {
+  //   if (activeJobs) {
+  //     console.log(activeJobs);
+  //   }
+  // }, [dispatch, activeJobs])
 
   const handleUpdateEstimate = (jobId, newLabel) => {
     setJobs((prev) =>
@@ -859,30 +862,6 @@ export default function MyJobs() {
               Manage your active assignments and ongoing tasks.
             </p>
           </div>
-
-          <button
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "6px",
-              padding: "9px 18px",
-              background: primary,
-              color: "#fff",
-              border: "none",
-              borderRadius: "9px",
-              fontSize: "12px",
-              fontWeight: 800,
-              cursor: "pointer",
-              fontFamily: "'Manrope', sans-serif",
-              boxShadow: `0 4px 14px -2px ${primary}55`,
-              transition: "opacity 0.15s",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.88")}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
-          >
-            <IconSVG name="add" />
-            Find New Work
-          </button>
         </div>
 
         {/* Section Label */}

@@ -33,6 +33,8 @@ export default function InvoiceDetails() {
         fetchJobDetails();
     }, [jobId]);
 
+    
+
     if (loading) return <div className="p-6 text-slate-500 font-medium">Loading...</div>;
     if (!job) return <div className="p-6 text-slate-500 font-medium">Job not found.</div>;
 
@@ -66,10 +68,6 @@ export default function InvoiceDetails() {
                 </div>
                 
                 <div className="flex gap-2">
-                    <button className="flex items-center gap-1 px-4 py-2 bg-[#161811] rounded-none text-[9px] font-black uppercase tracking-widest text-[#89d006] hover:bg-[#89d006] hover:text-[#161811] transition-all shadow-sm">
-                        <span className="material-symbols-outlined text-sm font-bold">download</span>
-                        Export PDF
-                    </button>
                     <button 
                         onClick={() => navigate(-1)}
                         className="size-10 flex items-center justify-center bg-[#f7f8f5] rounded-none text-[#161811] hover:bg-[#89d006]/10 transition-all font-bold"
@@ -124,10 +122,10 @@ export default function InvoiceDetails() {
                         </div>
 
                         <div className="mt-8 pt-6 border-t border-[#f3f5f0] flex flex-wrap gap-8">
-                            {[["Client", job.employer_name], ["Provider", job.worker_name], ["Zone", job.city]].map(([label, val]) => (
+                            {[["Client", job.employer_name], ["Provider", job.worker_name], ["Zone", job.city],["Work-ID",job.billing_info.job]].map(([label, val]) => (
                                 <div key={label}>
                                     <p className="text-[10px] font-black text-[#7c8c5f] uppercase tracking-[0.2em] mb-1">{label}</p>
-                                    <p className="text-sm font-black text-[#161811] uppercase tracking-tight">{val}</p>
+                                    <p className="text-sm font-black text-[#161811] uppercase tracking-tight ">{val}</p>
                                 </div>
                             ))}
                         </div>

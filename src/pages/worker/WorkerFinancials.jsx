@@ -52,20 +52,20 @@ export default function WorkerFinancials() {
                         <div className="flex flex-col">
                             <p className="text-gray-500 text-[10px] font-black uppercase tracking-widest mb-1 opacity-70">Available Balance</p>
                             <h1 className="text-[#161811] text-4xl font-black leading-none tracking-tighter">₹{parseFloat(summary.total_revenue).toFixed(2)}</h1>
-                            <div className="flex items-center gap-2 mt-2">
+                            {/* <div className="flex items-center gap-2 mt-2">
                                 <div className="flex text-[#89d006]">
                                     {[1,2,3,4].map(i => <span key={i} className="material-symbols-outlined text-[14px] fill-current" style={{fontVariationSettings: "'FILL' 1"}}>star</span>)}
                                     <span className="material-symbols-outlined text-[14px]" style={{fontVariationSettings: "'FILL' 0"}}>star_half</span>
                                 </div>
                                 <span className="text-[#161811] font-black text-xs">4.8</span>
                                 <span className="text-gray-400 text-[9px] font-bold tracking-tight">/ 5.0 RATING</span>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                     <div className="flex flex-col gap-2">
-                        <button className="flex items-center justify-center gap-2 min-w-[180px] rounded-none h-11 px-6 bg-[#89d006] text-[#161811] text-xs font-black transition-transform hover:scale-[1.02] active:scale-[0.98] shadow-sm">
+                        <button className="flex items-center justify-center gap-2 min-w-[180px] rounded-none h-11 px-6 bg-[#89d006] text-[#161811] text-xs font-black shadow-sm">
                             <span className="material-symbols-outlined text-base">account_balance_wallet</span>
-                            <span>WITHDRAW FUNDS</span>
+                            <span>TOTAL EARNED</span>
                         </button>
                         <p className="text-[9px] text-center text-gray-400 font-bold uppercase tracking-widest">Next payout: Auto-cycle</p>
                     </div>
@@ -114,9 +114,6 @@ export default function WorkerFinancials() {
                 <div className="bg-white rounded-none shadow-sm overflow-hidden">
                     <div className="p-6 border-b border-[#f3f5f0] flex flex-wrap justify-between items-center gap-3 bg-white">
                         <h3 className="text-sm font-black uppercase tracking-tight text-[#161811]">Recent Transactions</h3>
-                        <div className="flex gap-3">
-                            <button className="px-4 py-2 bg-[#f7f8f5] rounded-none text-[9px] font-black uppercase tracking-widest text-[#161811] hover:bg-[#89d006] transition-all">Download Audit</button>
-                        </div>
                     </div>
 
                     <div className="p-1">

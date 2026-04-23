@@ -6,6 +6,7 @@ import PaymentSuccessModal from "./Modals/PaymentSuccessModal";
 import { useNavigate } from 'react-router-dom';
 import Timer from '../../components/Timer';
 import api from '../../api/axiosInstance';
+import { Link } from 'react-router-dom';
 
 import { toast } from 'react-toastify';
 
@@ -167,7 +168,9 @@ const ContactBtns = () => (
     <div style={{ display: "flex", gap: 8, paddingRight: 16, marginRight: 8, borderRight: "1px solid #f3f4f6" }}>
         <IconBtn icon="call" />
         <IconBtn icon="videocam" />
-        <IconBtn icon="chat_bubble" />
+        <Link to={'/employer/messages'}>
+        <IconBtn icon="chat_bubble"/>
+        </Link>
     </div>
 );
 
@@ -531,7 +534,6 @@ const EmployerWorks = () => {
                                                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                                                     <ContactBtns />
                                                     <button className="primary-btn" onClick={() => handleAcceptStart(job.id)}>Approve Start</button>
-                                                    <button className="ghost-btn">Decline</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -637,14 +639,14 @@ const EmployerWorks = () => {
                                                     <p style={{ fontSize: 12, color: "#9ca3af" }}>Session finished and stored in archive.</p>
                                                 </div>
                                                 <div style={{ display: "flex", gap: 10 }}>
-                                                    <button className="primary-btn" style={{ background: "#161811", boxShadow: "none" }} onClick={() => navigate(`/employer/invoice/${job.id}`)}>View Invoice</button>
+                                                    <button className="primary-btn" style={{ background: "#161811", boxShadow: "none", borderRadius:'5px' }} onClick={() => navigate(`/employer/invoice/${job.id}`)}>View Invoice</button>
                                                     {job.billing_info?.is_paid ? (
                                                         <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '0 12px', background: '#f0fdf4', border: '1px solid #4ade80', borderRadius: 2 }}>
                                                             <span className="material-symbols-outlined" style={{ fontSize: 16, color: '#16a34a' }}>check_circle</span>
                                                             <span style={{ fontSize: 10, fontWeight: 900, color: '#16a34a', textTransform: 'uppercase' }}>Paid</span>
                                                         </div>
                                                     ) : (
-                                                        <button className="primary-btn" style={{ background: "#8ad007", boxShadow: "none" }} onClick={() => handlePayment(job)}>Payout</button>
+                                                        <button className="primary-btn" style={{ background: "#8ad007", boxShadow: "none", borderRadius:'5px' }} onClick={() => handlePayment(job)}>Payout</button>
                                                     )}
                                                 </div>
                                             </div>
@@ -682,7 +684,7 @@ const EmployerWorks = () => {
                                             <h2 style={{ fontSize: 20, fontWeight: 900, margin: '0 0 4px' }}>{selectedJob.worker_name}</h2>
                                             <p style={{ fontSize: 13, color: '#9ca3af', margin: 0 }}>Project ID: #WORK-{selectedJob.id}</p>
                                         </div>
-                                        <div style={{ padding: '6px 12px', background: `${primary}15`, borderRadius: 10, color: primary, fontSize: 13, fontWeight: 800 }}>
+                                        <div style={{ padding: '6px 12px', background: `${primary}15`, borderRadius: 10, color: primary, fontSize: 10, fontWeight: 800 }}>
                                             {selectedJob.status.toUpperCase()}
                                         </div>
                                     </div>
@@ -711,7 +713,7 @@ const EmployerWorks = () => {
                                         ) : (
                                             <button className="primary-btn" style={{ flex: 1 }} onClick={() => setSelectedJob(null)}>Close View</button>
                                         )}
-                                        <button className="ghost-btn" style={{ flex: 1 }}>Message</button>
+                                        {/* <button className="ghost-btn" style={{ flex: 1 }}>Message</button> */}
                                     </div>
                                 </div>
                             </div>

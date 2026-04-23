@@ -65,20 +65,20 @@ function WorkerDash() {
                     <h1 className="text-xl font-extrabold text-[#161811]">Worker Dashboard</h1>
                     <p className="mt-1 text-xs font-medium text-[#7c8c5f]">Track your performance and earnings overview.</p>
                 </div>
-                <div className="flex items-center gap-3">
+                {/* <div className="flex items-center gap-3">
                     <button className="flex h-9 w-9 items-center justify-center rounded-lg bg-white border border-[#e2e6db] text-[#7c8c5f] hover:text-[#161811] transition-colors">
                         <span className="material-symbols-outlined text-[20px]">notifications</span>
                     </button>
                     <button className="flex h-9 w-9 items-center justify-center rounded-lg bg-white border border-[#e2e6db] text-[#7c8c5f] hover:text-[#161811] transition-colors">
                         <span className="material-symbols-outlined text-[20px]">settings</span>
                     </button>
-                </div>
+                </div> */}
             </div>
 
             {/* Summary Stats Grid */}
             <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-5">
                 {/* Total Works Taken */}
-                <div className="flex justify-between items-center rounded-xl bg-white p-6 shadow-sm border border-[#e2e6df] border-opacity-40">
+                <div className="flex justify-between items-center rounded-sm bg-white p-6 shadow-sm border border-[#e2e6df] border-opacity-40">
                     <div>
                         <p className="text-[10px] font-extrabold uppercase tracking-widest text-[#94a3b8]">Total Works Taken</p>
                         <h2 className="mt-1 text-2xl font-black text-[#161811]">{summary.job_count || 0}</h2>
@@ -89,7 +89,7 @@ function WorkerDash() {
                 </div>
 
                 {/* Total Revenue */}
-                <div className="flex justify-between items-center rounded-xl bg-white p-6 shadow-sm border border-[#e2e6df] border-opacity-40">
+                <div className="flex justify-between items-center rounded-sm bg-white p-6 shadow-sm border border-[#e2e6df] border-opacity-40">
                     <div>
                         <p className="text-[10px] font-extrabold uppercase tracking-widest text-[#94a3b8]">Total Revenue</p>
                         <h2 className="mt-1 text-2xl font-black text-[#161811]">₹ {Number(summary.total_revenue || 0).toLocaleString()}</h2>
@@ -100,7 +100,7 @@ function WorkerDash() {
                 </div>
 
                 {/* Average Rating */}
-                <div className="flex justify-between items-center rounded-xl bg-white p-6 shadow-sm border border-[#e2e6df] border-opacity-40">
+                <div className="flex justify-between items-center rounded-sm bg-white p-6 shadow-sm border border-[#e2e6df] border-opacity-40">
                     <div>
                         <p className="text-[10px] font-extrabold uppercase tracking-widest text-[#94a3b8]">Penalty Count</p>
                         <div className="mt-1 flex items-baseline gap-1">
@@ -116,7 +116,7 @@ function WorkerDash() {
             {/* Charts Section */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Revenue Bar Chart */}
-                <div className="rounded-xl bg-white p-7 shadow-sm border border-[#e2e6df] border-opacity-40">
+                <div className="rounded-sm bg-white p-7 shadow-sm border border-[#e2e6df] border-opacity-40">
                     <div className="mb-8 flex items-center justify-between">
                         <h3 className="text-sm font-black text-[#161811]">Total Revenue Generated</h3>
                         <span className="rounded-md bg-[#f8fafc] px-3 py-1 text-[8px] font-black text-[#94a3b8]">Trend Breakdown</span>
@@ -124,8 +124,8 @@ function WorkerDash() {
                     <div className="h-[280px] w-100%">
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={displayData}>
-                                <Tooltip cursor={{ fill: 'transparent' }} contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }} />
-                                <Bar dataKey="revenue" radius={[6, 6, 0, 0]}>
+                                <Tooltip cursor={{ fill: 'transparent' }} contentStyle={{ borderRadius: '3px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.05)',fontSize:"9px" }} />
+                                <Bar dataKey="revenue" radius={[4, 4, 0, 0]}>
                                     {displayData.map((entry, index) => (
                                         <Cell key={`cell-${index}`} fill={PRIMARY} />
                                     ))}
@@ -137,7 +137,7 @@ function WorkerDash() {
                 </div>
 
                 {/* Works Taken Line Chart */}
-                <div className="rounded-xl bg-white p-7 shadow-sm border border-[#e2e6df] border-opacity-40">
+                <div className="rounded-sm bg-white p-7 shadow-sm border border-[#e2e6df] border-opacity-40">
                     <div className="mb-8 flex items-center justify-between">
                         <h3 className="text-sm font-black text-[#161811]">Total Works Taken</h3>
                         <span className="rounded-md bg-[#f8fafc] px-3 py-1 text-[8px] font-black text-[#94a3b8]">Workload Timeline</span>
@@ -146,8 +146,8 @@ function WorkerDash() {
                         <ResponsiveContainer width="100%" height="100%">
                             <LineChart data={displayData}>
                                 <CartesianGrid vertical={false} stroke="#f1f5f9" strokeDasharray="3 3" />
-                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 9, fontWeight: 800, fill: '#94a3b8' }} dy={10} />
-                                <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }} />
+                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 9, fontWeight: 800, fill: '#94a3b8', }} dy={10} />
+                                <Tooltip contentStyle={{ borderRadius: '3px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.05)',fontSize:"9px" }} />
                                 <Line 
                                     type="monotone" 
                                     dataKey="count" 
@@ -169,7 +169,7 @@ function WorkerDash() {
             </div>
 
             {/* Browse Jobs CTA Banner */}
-            <div className="mt-8 relative overflow-hidden rounded-2xl bg-[#8ad007] p-8 md:p-12 text-white shadow-xl shadow-[#8ad007]/20">
+            <div className="mt-8 relative overflow-hidden rounded-sm bg-[#8ad007] p-8 md:p-12 text-white shadow-xl shadow-[#8ad007]/20">
                 {/* Decorative background elements */}
                 <div className="absolute top-[-20%] right-[-10%] h-64 w-64 rounded-full bg-white/10 blur-3xl"></div>
                 <div className="absolute bottom-[-10%] left-[-5%] h-32 w-32 rounded-full bg-black/5 blur-2xl"></div>
@@ -181,7 +181,7 @@ function WorkerDash() {
                     </div>
                     <button 
                         onClick={() => navigate('/worker/job-feed')}
-                        className="group flex items-center gap-2 rounded-xl bg-white px-6 py-3 text-base font-black text-[#8ad007] transition-all hover:scale-105 active:scale-95 shadow-lg"
+                        className="group flex items-center gap-2 rounded-sm bg-white px-6 py-3 text-base font-black text-[#8ad007] transition-all hover:scale-105 active:scale-95 shadow-lg cursor-pointer"
                     >
                         Browse Job Feed
                         <span className="material-symbols-outlined text-[20px] transition-transform group-hover:translate-x-1">arrow_forward</span>

@@ -4,14 +4,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { FetchAllWorkers } from "../../redux/slice/employerSlice";
 
 const stats = [
-    { label: "Total Jobs Completed", value: "124", change: "+12%", changeColor: "text-emerald-600 bg-emerald-50", icon: "✓", iconBg: "bg-[#8ad007]/10 text-[#8ad007]" },
-    { label: "Favorite Workers", value: "18", change: "+5%", changeColor: "text-emerald-600 bg-emerald-50", icon: "👥", iconBg: "bg-blue-500/10 text-blue-500" },
-    { label: "Active Postings", value: "4", change: "Stable", changeColor: "text-gray-400", icon: "📋", iconBg: "bg-purple-500/10 text-purple-500" },
-    { label: "Approval Rating", value: "4.9", change: "98%", changeColor: "text-orange-600 bg-orange-50", icon: "⭐", iconBg: "bg-orange-500/10 text-orange-500" },
+    // { label: "Total Jobs Completed", value: "124", change: "+12%", changeColor: "text-emerald-600 bg-emerald-50", icon: "✓", iconBg: "bg-[#8ad007]/10 text-[#8ad007]" },
+    // { label: "Favorite Workers", value: "18", change: "+5%", changeColor: "text-emerald-600 bg-emerald-50", icon: "👥", iconBg: "bg-blue-500/10 text-blue-500" },
+    // { label: "Active Postings", value: "4", change: "Stable", changeColor: "text-gray-400", icon: "📋", iconBg: "bg-purple-500/10 text-purple-500" },
+    // { label: "Approval Rating", value: "4.9", change: "98%", changeColor: "text-orange-600 bg-orange-50", icon: "⭐", iconBg: "bg-orange-500/10 text-orange-500" },
 ];
 
 export default function EmployerDash() {
     const { loading, allWorkers } = useSelector((state) => state.employer);
+    
     const [searchValue, setSearchValue] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [openRequestModal,setOpenRequestModal] = useState(false)
@@ -70,9 +71,14 @@ export default function EmployerDash() {
 
                 {/* Search Bar */}
                 <section className="mb-6">
-                    <div className="bg-white rounded-2xl p-1.5 shadow-md border" style={{ borderColor: "#8ad00733" }}>
+                    <div className="bg-white rounded-xl p-1.5 shadow-sm border" style={{ borderColor: "#8ad00733" }}>
                         <div className="flex items-center px-3 py-1">
-                            <span className="mr-2">🔍</span>
+                            <span className="mr-2">
+                                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="30" height="30">
+                                    <circle cx="42" cy="42" r="22" fill="none" stroke="#8ad007" stroke-width="7" stroke-linecap="round"/>
+                                    <line x1="58" y1="58" x2="76" y2="76" stroke="#8ad007" stroke-width="7" stroke-linecap="round"/>
+                                </svg>
+                            </span>
                             <input
                                 className="flex-1 outline-none text-sm py-2 bg-transparent text-gray-900"
                                 placeholder="Find a worker by name or skill..."
@@ -82,10 +88,24 @@ export default function EmployerDash() {
                             />
                             <button
                                 onClick={handleSearch}
-                                className="text-white font-bold px-5 py-2 rounded-xl text-sm transition-all active:scale-95"
+                                className="text-white font-bold px-5 py-2 rounded-sm text-sm transition-all active:scale-95 cursor-pointer group"
                                 style={{ background: "#8ad007" }}
                             >
-                                Hustle
+                                    <div className="size-7 text-white shrink-0 transition-transform duration-500 group-hover:rotate-[360deg]">
+                                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="w-full h-full fill-current">
+                                            <g transform="translate(50, 50)">
+                                                <circle cx="0" cy="0" r="6" />
+                                                <rect x="-3" y="-28" width="6" height="22" rx="3" />
+                                                <rect x="-3" y="6" width="6" height="22" rx="3" />
+                                                <rect x="-28" y="-3" width="22" height="6" rx="3" />
+                                                <rect x="6" y="-3" width="22" height="6" rx="3" />
+                                                <rect x="-3" y="-22" width="6" height="16" rx="3" transform="rotate(45 0 0)" />
+                                                <rect x="-3" y="-22" width="6" height="16" rx="3" transform="rotate(135 0 0)" />
+                                                <rect x="-3" y="-22" width="6" height="16" rx="3" transform="rotate(225 0 0)" />
+                                                <rect x="-3" y="-22" width="6" height="16" rx="3" transform="rotate(315 0 0)" />
+                                            </g>
+                                        </svg>
+                                    </div>
                             </button>
                         </div>
                     </div>
@@ -148,7 +168,7 @@ export default function EmployerDash() {
                                         <span className="text-lg font-black text-gray-900">₹{worker.base_Pay}</span>
                                         <span className="text-gray-500 text-xs ml-0.5">/hr</span>
                                     </div>
-                                    <button className="w-full text-white font-bold py-2 px-4 text-[10px] rounded-lg active:scale-95 transition-all shadow-sm hover:opacity-90" style={{ background: "#8ad007" }}
+                                    <button className="w-full text-white font-bold py-2 px-4 text-[10px] rounded-sm active:scale-95 transition-all shadow-sm hover:opacity-90 cursor-pointer" style={{ background: "#8ad007" }}
                                     onClick={()=>handleOpenModal(worker)}>
                                         Send Request
                                     </button>

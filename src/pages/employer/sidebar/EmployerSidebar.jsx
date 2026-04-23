@@ -8,11 +8,17 @@ const EmployerSidebar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { interestRequests } = useSelector(state => state.employer);
+  const { employerData, profileData } = useSelector((state) => state.profile);
   const [isWorker, setIsWorker] = useState(false);
 
   useEffect(() => {
     dispatch(FetchInterestRequests());
   }, [dispatch]);
+
+  const company_name = localStorage.getItem('company_name')
+  const profile_image = localStorage.getItem('profile_image')
+  const username = localStorage.getItem('username')
+
 
   const navItems = [
     { to: '/employer/dashboard', icon: 'dashboard', label: 'Dashboard' },
@@ -40,10 +46,21 @@ const EmployerSidebar = () => {
 
       {/* Logo */}
       <div className="p-5 flex items-center gap-2.5">
-        <div className="w-7 h-7 bg-[#8ad007] rounded-lg flex items-center justify-center">
-          <span className="material-symbols-outlined text-black font-bold text-xl">bolt</span>
-        </div>
-        <h2 className="text-lg font-extrabold tracking-tight text-[#161811]">Hustlr</h2>
+         <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" className="w-9 h-9">
+            <rect x="50" y="50" width="300" height="300" rx="60" fill="#8ad007"/>
+            <g transform="translate(200, 200)">
+              <circle cx="0" cy="0" r="18" fill="#ffffff"/>
+              <rect x="-8" y="-72" width="16" height="57" rx="8" fill="#ffffff"/>
+              <rect x="-8" y="15" width="16" height="57" rx="8" fill="#ffffff"/>
+              <rect x="-72" y="-8" width="57" height="16" rx="8" fill="#ffffff"/>
+              <rect x="15" y="-8" width="57" height="16" rx="8" fill="#ffffff"/>
+              <rect x="-8" y="-57" width="16" height="42" rx="8" fill="#ffffff" transform="rotate(45 0 0)"/>
+              <rect x="-8" y="-57" width="16" height="42" rx="8" fill="#ffffff" transform="rotate(135 0 0)"/>
+              <rect x="-8" y="-57" width="16" height="42" rx="8" fill="#ffffff" transform="rotate(225 0 0)"/>
+              <rect x="-8" y="-57" width="16" height="42" rx="8" fill="#ffffff" transform="rotate(315 0 0)"/>
+            </g>
+          </svg>
+        <h2 className="text-md font-extrabold tracking-tight text-[#161811]">Hustlr</h2>
       </div>
 
       {/* Navigation */}
@@ -78,14 +95,14 @@ const EmployerSidebar = () => {
         {/* Post a Job CTA */}
         <button
           onClick={() => navigate('/employer/post-job')}
-          className="w-full mb-4 py-2.5 px-3 bg-[#8ad007] hover:bg-[#8ad007]/90 text-white text-xs font-bold rounded-lg flex items-center justify-center gap-2 shadow-md shadow-[#8ad007]/20 transition-all active:scale-95"
+          className="w-full mb-4 py-2.5 px-3 bg-[#8ad007] hover:bg-[#8ad007]/90 text-white text-xs font-bold rounded-lg flex items-center justify-center gap-2 shadow-md shadow-[#8ad007]/20 transition-all active:scale-95 cursor-pointer"
         >
           <span className="material-symbols-outlined text-base">add_circle</span>
           <span>Post a Job</span>
         </button>
 
         {/* Switch to Worker Toggle */}
-        <div className="flex items-center justify-between mb-4">
+        {/* <div className="flex items-center justify-between mb-4">
           <span className="text-xs font-medium text-[#161811]">Switch to Worker</span>
           <label className="relative inline-flex items-center cursor-pointer">
             <input
@@ -96,22 +113,34 @@ const EmployerSidebar = () => {
             />
             <div className="w-10 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#8ad007]"></div>
           </label>
-        </div>
+        </div> */}
 
         {/* User Profile */}
         <div className="flex items-center gap-2.5">
-          <div
-            className="w-9 h-9 rounded-full bg-cover bg-center border-2 border-[#8ad007]"
-            style={{
-              backgroundImage:
-                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuC77XuWGCRaZwq6Bmmrq_UAQA_ffMWMVb8StzXRMV0HeCzDCc0yCS_DD24ZzhP3SznggpkoBnbPQmo-at15jrvpBGBKIBOGRUjOKcp-wRY030wxGshYq7sr7qxnBOZuXI6u3ujwvYK1BbtKOeM0hf2EPJq5ClI1y-i_JtuaGMFu9gekdBZ3RSI_rfzDG7G1s54OdpGVPSgWDHtBV4M_mk6aGhJj8oz15I9EOvI7XWzHd6G9QUomXEc4hJQvGX1fgAxZlOdmGBmzxlE')",
-            }}
-          />
+          <div className="w-9 h-9 rounded-full border-2 border-[#8ad007] flex items-center justify-center overflow-hidden bg-[#f3f5f0]">
+            {profile_image && profile_image !== "null" ? (
+              <img 
+                src={profile_image} 
+                alt={company_name} 
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <span className="text-[#8ad007] font-bold text-sm">
+                {company_name?.[0]?.toUpperCase() || 'H'}
+              </span>
+            )}
+          </div>
           <div>
-            <p className="text-xs font-bold text-[#161811]">Marcus</p>
-            <p className="text-[10px] text-[#7c8c5f]">Premium Corporate</p>
+            <p className="text-xs font-bold text-[#161811]">
+              {username ? (username[0].toUpperCase() + username.slice(1)) : 
+               company_name ? (company_name[0].toUpperCase() + company_name.slice(1)) : 
+               'Hustlr User'}
+            </p>
+            <p className="text-[10px] text-[#7c8c5f]">Employer</p>
           </div>
         </div>
+
+        
 
       </div>
     </aside>

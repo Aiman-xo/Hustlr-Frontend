@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import Spinner from "../publilc/Spinner";
 import Timer from "../../components/Timer";
+import { useNavigate } from "react-router-dom";
 
 function RequestCard({ req }) {
   const { loading, error } = useSelector((state) => state.employer)
@@ -38,6 +39,7 @@ function RequestCard({ req }) {
 
   const [isAccepting, setIsAccepting] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
+  const nav = useNavigate()
 
   const handleAcceptStart = async (jobId) => {
     setIsAccepting(true);
@@ -277,7 +279,7 @@ function RequestCard({ req }) {
             </div>
           )}
           <button
-            className="w-9 h-9 flex items-center justify-center rounded-xl transition-all hover:text-white"
+            className="w-9 h-9 flex items-center justify-center rounded-xl transition-all hover:text-white cursor-pointer"
             style={{ backgroundColor: "rgba(138,208,7,0.1)", color: "#8ad007" }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = "#8ad007";
@@ -287,6 +289,7 @@ function RequestCard({ req }) {
               e.currentTarget.style.backgroundColor = "rgba(138,208,7,0.1)";
               e.currentTarget.style.color = "#8ad007";
             }}
+            onClick={()=>nav('/employer/messages')} 
           >
             <span
               className="material-symbols-outlined"
@@ -364,7 +367,7 @@ export default function WorkRequests() {
             <button
               key={tab.value}
               onClick={() => handleFilterChange(tab.value)}
-              className="px-3 py-1.5 border rounded-lg font-bold text-[10px] shadow-sm transition-all cursor-pointer"
+              className="px-2 py-2 border rounded-sm font-bold text-[9px] shadow-sm transition-all cursor-pointer"
               style={{
                 // Use your primary greenish color when active
                 backgroundColor: currentStatus === tab.value ? "#8ad007" : "white",

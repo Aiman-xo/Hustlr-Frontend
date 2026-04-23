@@ -22,7 +22,7 @@ export default function PaymentSuccessModal({ isOpen, onClose }) {
       onClick={onClose}
     >
       <div 
-        className={`bg-white rounded-[32px] p-10 max-w-sm w-full shadow-2xl text-center transform transition-all duration-500 ${isVisible ? 'scale-100 translate-y-0' : 'scale-90 translate-y-10'}`}
+        className={`bg-white rounded-[6px] p-10 max-w-sm w-full shadow-2xl text-center transform transition-all duration-500 ${isVisible ? 'scale-100 translate-y-0' : 'scale-90 translate-y-10'}`}
         onClick={(e) => e.stopPropagation()}
       >
         <style>{`
@@ -75,13 +75,13 @@ export default function PaymentSuccessModal({ isOpen, onClose }) {
         </div>
 
         <h2 className="text-2xl font-black text-slate-900 mb-2">Payment Success!</h2>
-        <p className="text-slate-500 font-medium mb-8 leading-relaxed">
+        <p className="text-slate-500 font-medium  text-xs mb-8 leading-relaxed">
           Your transaction was verified successfully. The worker will be notified of the payout.
         </p>
 
         <button 
           onClick={onClose}
-          className="w-full bg-[#8ad007] text-white font-black py-4 rounded-2xl shadow-lg shadow-[#8ad007]/30 hover:scale-[1.02] active:scale-95 transition-all text-sm uppercase tracking-widest"
+          className="w-full bg-[#8ad007] text-white font-black py-4 rounded-sm shadow-lg shadow-[#8ad007]/30 hover:scale-[1.02] active:scale-95 transition-all text-sm uppercase tracking-widest cursor-pointer"
         >
           Great, thanks!
         </button>
