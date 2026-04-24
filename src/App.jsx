@@ -1,7 +1,7 @@
 // import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import { Route, Routes, Navigate } from 'react-router-dom'
+import { Route, Routes, Navigate, useLocation } from 'react-router-dom'
 import WorkerDash from './pages/worker/WorkerDash'
 import WorkerProfileSetup from './pages/profile/WorkerProfileSetup'
 import EmployerDash from './pages/employer/EmployerDash'
@@ -61,9 +61,13 @@ function App() {
   const userId = authInitialized ? user?.id : null;
   useNotificationSocket(userId);
 
+  const location = useLocation();
+  const hideAIPaths = ['/', '/login', '/role', '/resetPassword'];
+  const isAIHidden = hideAIPaths.includes(location.pathname) || location.pathname.startsWith('/register');
+
   return (
     <>
-    {user && role !== "admin" && <HustlrAIAssistant/>}
+    {!isAIHidden && user && role !== "admin" && <HustlrAIAssistant/>}
       <Routes>
         {/* <Route path="/login" element={<Login />} /> */}
         <Route path="/register/:selectedRole" element={<Register />} />
