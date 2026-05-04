@@ -116,7 +116,8 @@ export const GoogleAuth = createAsyncThunk(
     try {
       const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/google/auth/`, {
         code,
-        role
+        role,
+        platform: "web"
       }, {
         withCredentials: true
       })
