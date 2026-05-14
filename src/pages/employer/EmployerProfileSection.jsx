@@ -292,19 +292,19 @@ const EmployerProfileSection = () => {
                 {loading ? (
                   <>
                     <div className="size-6 text-white shrink-0 animate-spin">
-                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="w-full h-full fill-current">
-                            <g transform="translate(50, 50)">
-                                <circle cx="0" cy="0" r="6" />
-                                <rect x="-3" y="-28" width="6" height="22" rx="3" />
-                                <rect x="-3" y="6" width="6" height="22" rx="3" />
-                                <rect x="-28" y="-3" width="22" height="6" rx="3" />
-                                <rect x="6" y="-3" width="22" height="6" rx="3" />
-                                <rect x="-3" y="-22" width="6" height="16" rx="3" transform="rotate(45 0 0)" />
-                                <rect x="-3" y="-22" width="6" height="16" rx="3" transform="rotate(135 0 0)" />
-                                <rect x="-3" y="-22" width="6" height="16" rx="3" transform="rotate(225 0 0)" />
-                                <rect x="-3" y="-22" width="6" height="16" rx="3" transform="rotate(315 0 0)" />
-                            </g>
-                        </svg>
+                      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="w-full h-full fill-current">
+                        <g transform="translate(50, 50)">
+                          <circle cx="0" cy="0" r="6" />
+                          <rect x="-3" y="-28" width="6" height="22" rx="3" />
+                          <rect x="-3" y="6" width="6" height="22" rx="3" />
+                          <rect x="-28" y="-3" width="22" height="6" rx="3" />
+                          <rect x="6" y="-3" width="22" height="6" rx="3" />
+                          <rect x="-3" y="-22" width="6" height="16" rx="3" transform="rotate(45 0 0)" />
+                          <rect x="-3" y="-22" width="6" height="16" rx="3" transform="rotate(135 0 0)" />
+                          <rect x="-3" y="-22" width="6" height="16" rx="3" transform="rotate(225 0 0)" />
+                          <rect x="-3" y="-22" width="6" height="16" rx="3" transform="rotate(315 0 0)" />
+                        </g>
+                      </svg>
                     </div>
                     <span>Saving...</span>
                   </>
@@ -312,19 +312,19 @@ const EmployerProfileSection = () => {
                   <>
                     Save
                     <div className="size-6 text-white shrink-0 transition-transform duration-500 group-hover:rotate-[360deg]">
-                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="w-full h-full fill-current">
-                            <g transform="translate(50, 50)">
-                                <circle cx="0" cy="0" r="6" />
-                                <rect x="-3" y="-28" width="6" height="22" rx="3" />
-                                <rect x="-3" y="6" width="6" height="22" rx="3" />
-                                <rect x="-28" y="-3" width="22" height="6" rx="3" />
-                                <rect x="6" y="-3" width="22" height="6" rx="3" />
-                                <rect x="-3" y="-22" width="6" height="16" rx="3" transform="rotate(45 0 0)" />
-                                <rect x="-3" y="-22" width="6" height="16" rx="3" transform="rotate(135 0 0)" />
-                                <rect x="-3" y="-22" width="6" height="16" rx="3" transform="rotate(225 0 0)" />
-                                <rect x="-3" y="-22" width="6" height="16" rx="3" transform="rotate(315 0 0)" />
-                            </g>
-                        </svg>
+                      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="w-full h-full fill-current">
+                        <g transform="translate(50, 50)">
+                          <circle cx="0" cy="0" r="6" />
+                          <rect x="-3" y="-28" width="6" height="22" rx="3" />
+                          <rect x="-3" y="6" width="6" height="22" rx="3" />
+                          <rect x="-28" y="-3" width="22" height="6" rx="3" />
+                          <rect x="6" y="-3" width="22" height="6" rx="3" />
+                          <rect x="-3" y="-22" width="6" height="16" rx="3" transform="rotate(45 0 0)" />
+                          <rect x="-3" y="-22" width="6" height="16" rx="3" transform="rotate(135 0 0)" />
+                          <rect x="-3" y="-22" width="6" height="16" rx="3" transform="rotate(225 0 0)" />
+                          <rect x="-3" y="-22" width="6" height="16" rx="3" transform="rotate(315 0 0)" />
+                        </g>
+                      </svg>
                     </div>
                   </>
                 )}

@@ -37,15 +37,15 @@ const LocationPicker = ({ onLocationSelected, searchQuery }) => {
                 }
             );
             const data = await response.json();
-            const shortAddress = data.address.road 
-            ? `${data.address.road}, ${data.address.city || data.address.town || ""}`
-            : data.display_name;
-            
+            const shortAddress = data.address.road
+                ? `${data.address.road}, ${data.address.city || data.address.town || ""}`
+                : data.display_name;
+
             const locationData = {
                 latitude: lat,
                 longitude: lng,
                 city: data.address.city || data.address.town || data.address.village || data.address.state || "Unknown",
-                address: shortAddress.slice(0,95)       
+                address: shortAddress.slice(0, 95)
             };
 
             onLocationSelected(locationData);
@@ -78,7 +78,7 @@ const LocationPicker = ({ onLocationSelected, searchQuery }) => {
                     }
                 );
                 const data = await response.json();
-                
+
                 if (data.length > 0) {
                     const { lat, lon } = data[0];
                     const newLat = parseFloat(lat);
@@ -95,12 +95,12 @@ const LocationPicker = ({ onLocationSelected, searchQuery }) => {
 
     return (
         <div className="w-full">
-            <div className="h-[300px] w-full rounded-lg border-2 border-gray-300 overflow-hidden">
-                <MapContainer 
-                    center={position} 
+            <div className="h-[300px] w-full rounded-lg border-2 border-gray-300 overflow-hidden" style={{ position: 'relative', zIndex: 0, isolation: 'isolate' }}>
+                <MapContainer
+                    center={position}
                     zoom={13}
-                    style={{ height: '300px', width: '100%' }} 
-                    scrollWheelZoom={false} 
+                    style={{ height: '300px', width: '100%', zIndex: 0 }}
+                    scrollWheelZoom={false}
                     className="h-full w-full"
                 >
                     <TileLayer
