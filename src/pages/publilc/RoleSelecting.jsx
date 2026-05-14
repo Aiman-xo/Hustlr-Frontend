@@ -5,29 +5,60 @@ const RoleSelection = () => {
   const nav = useNavigate();
 
   return (
-    <div className="bg-[#f7f8f5] h-screen flex flex-col font-['Manrope',_sans-serif] text-slate-900 overflow-hidden selection:bg-[#89cf07]/30">
+    <div className="role-outer-container bg-[#f7f8f5] font-['Manrope',_sans-serif] text-slate-900 selection:bg-[#89cf07]/30">
+      <style>{`
+        .role-outer-container {
+          height: 100vh;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+        }
+
+        @media (max-width: 768px) {
+          .role-outer-container {
+            height: auto;
+            min-height: 100vh;
+            overflow: visible;
+          }
+          .role-main-container {
+            padding-top: 40px !important;
+            padding-bottom: 40px !important;
+          }
+          .role-grid-container {
+            grid-template-columns: 1fr !important;
+          }
+          .role-header {
+            padding-top: 40px !important;
+            padding-bottom: 20px !important;
+          }
+          .role-footer {
+            flex-direction: column !important;
+            gap: 20px !important;
+          }
+        }
+      `}</style>
       <div className="relative flex-1 flex flex-col overflow-hidden">
-        
+
         {/* Background Accents */}
         <div className="absolute top-[-10%] right-[-10%] w-80 h-80 bg-[#89cf07]/10 rounded-full blur-[100px] pointer-events-none"></div>
         <div className="absolute bottom-[-10%] left-[-10%] w-80 h-80 bg-[#89cf07]/10 rounded-full blur-[100px] pointer-events-none"></div>
 
         {/* --- Navigation --- */}
-        <header className="flex items-center justify-center py-8 z-20 shrink-0">
+        <header className="role-header flex items-center justify-center py-8 z-20 shrink-0">
           <div className="flex flex-col items-center gap-1 group cursor-default">
             <div className="flex items-center justify-center">
               {/* Added explicit width/height to SVG */}
               <svg className="w-12 h-12" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                 <g transform="translate(50, 50)">
-                  <circle cx="0" cy="0" r="6" fill="#8ad007"/>
-                  <rect x="-3" y="-28" width="6" height="22" rx="3" fill="#8ad007"/>
-                  <rect x="-3" y="6" width="6" height="22" rx="3" fill="#8ad007"/>
-                  <rect x="-28" y="-3" width="22" height="6" rx="3" fill="#8ad007"/>
-                  <rect x="6" y="-3" width="22" height="6" rx="3" fill="#8ad007"/>
-                  <rect x="-3" y="-22" width="6" height="16" rx="3" fill="#8ad007" transform="rotate(45 0 0)"/>
-                  <rect x="-3" y="-22" width="6" height="16" rx="3" fill="#8ad007" transform="rotate(135 0 0)"/>
-                  <rect x="-3" y="-22" width="6" height="16" rx="3" fill="#8ad007" transform="rotate(225 0 0)"/>
-                  <rect x="-3" y="-22" width="6" height="16" rx="3" fill="#8ad007" transform="rotate(315 0 0)"/>
+                  <circle cx="0" cy="0" r="6" fill="#8ad007" />
+                  <rect x="-3" y="-28" width="6" height="22" rx="3" fill="#8ad007" />
+                  <rect x="-3" y="6" width="6" height="22" rx="3" fill="#8ad007" />
+                  <rect x="-28" y="-3" width="22" height="6" rx="3" fill="#8ad007" />
+                  <rect x="6" y="-3" width="22" height="6" rx="3" fill="#8ad007" />
+                  <rect x="-3" y="-22" width="6" height="16" rx="3" fill="#8ad007" transform="rotate(45 0 0)" />
+                  <rect x="-3" y="-22" width="6" height="16" rx="3" fill="#8ad007" transform="rotate(135 0 0)" />
+                  <rect x="-3" y="-22" width="6" height="16" rx="3" fill="#8ad007" transform="rotate(225 0 0)" />
+                  <rect x="-3" y="-22" width="6" height="16" rx="3" fill="#8ad007" transform="rotate(315 0 0)" />
                 </g>
               </svg>
             </div>
@@ -36,9 +67,9 @@ const RoleSelection = () => {
         </header>
 
         {/* --- Main Content --- */}
-        <main className="flex-1 flex flex-col items-center justify-center px-6 relative z-10">
+        <main className="role-main-container flex-1 flex flex-col items-center justify-center px-6 relative z-10">
           <div className="w-full max-w-2xl mx-auto text-center">
-            
+
             <div className="mb-8">
               <h1 className="text-2xl md:text-3xl font-black tracking-tight mb-2 text-[#1c230f]">
                 Choose Your Path
@@ -48,9 +79,9 @@ const RoleSelection = () => {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-5 mb-8">
+            <div className="role-grid-container grid md:grid-cols-2 gap-5 mb-8">
               {/* Worker Card */}
-              <button 
+              <button
                 className="group relative bg-white/50 backdrop-blur-xl border border-white rounded-2xl p-7 text-left transition-all duration-300 hover:border-[#89cf07]/40 hover:shadow-xl hover:shadow-[#89cf07]/5 hover:-translate-y-1 overflow-hidden"
                 onClick={() => nav('/register/worker')}
               >
@@ -69,7 +100,7 @@ const RoleSelection = () => {
               </button>
 
               {/* Employer Card */}
-              <button 
+              <button
                 className="group relative bg-white/50 backdrop-blur-xl border border-white rounded-2xl p-7 text-left transition-all duration-300 hover:border-[#89cf07]/40 hover:shadow-xl hover:shadow-[#89cf07]/5 hover:-translate-y-1 overflow-hidden"
                 onClick={() => nav('/register/employer')}
               >
@@ -96,7 +127,7 @@ const RoleSelection = () => {
         </main>
 
         {/* --- Minimal Footer --- */}
-        <footer className="px-6 py-6 shrink-0">
+        <footer className="role-footer px-6 py-6 shrink-0">
           <div className="max-w-2xl mx-auto flex flex-col md:flex-row items-center justify-between border-t border-slate-200 pt-6 gap-3">
             <p className="text-slate-400 text-[9px] font-bold uppercase tracking-[0.15em]">
               © 2026 Hustlr Platform

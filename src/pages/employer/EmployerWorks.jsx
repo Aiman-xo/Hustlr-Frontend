@@ -125,6 +125,26 @@ const styles = `
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
+
+  @media (max-width: 768px) {
+    .employer-works-container .page-content { padding: 20px 16px !important; }
+    .employer-works-container .header-card { flex-direction: column; padding: 24px 20px !important; text-align: center; gap: 20px !important; }
+    .employer-works-container .header-card > div:first-child { max-width: 100%; display: flex; flex-direction: column; align-items: center; }
+    .employer-works-container .header-card p { max-width: 100% !important; margin-left: auto; margin-right: auto; }
+    .employer-works-container .stats-container { justify-content: center; gap: 16px !important; width: 100%; flex-wrap: wrap; }
+    .employer-works-container .tabs-wrapper { overflow-x: auto; display: block; width: 100%; padding-bottom: 8px; }
+    .employer-works-container .tabs-container { display: inline-flex !important; min-width: max-content; }
+    
+    .employer-works-container .work-card-inner { flex-direction: column; }
+    .employer-works-container .work-card-sidebar { width: 100% !important; border-right: none !important; border-bottom: 1px solid #f3f4f6; }
+    .employer-works-container .work-card-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
+    .employer-works-container .work-card-footer { justify-content: center !important; text-align: center; }
+    .employer-works-container .footer-stats { justify-content: center !important; }
+    
+    .employer-works-container .modal-content { width: 95% !important; margin: 10px; max-height: 90vh; overflow-y: auto; }
+    .employer-works-container .project-thumbnail { height: 160px !important; }
+  }
+
 `;
 
 const Avatar = ({ src, size = 56, border = primary }) => (
@@ -142,13 +162,13 @@ const Avatar = ({ src, size = 56, border = primary }) => (
 );
 
 const ProjectThumbnail = ({ src }) => (
-  <div style={{
+  <div className="project-thumbnail" style={{
       width: "100%", height: 100, borderRadius: 12, marginTop: 16,
       backgroundColor: '#f3f4f6', overflow: "hidden", border: "1px solid #e5e7eb",
       position: 'relative', cursor: 'pointer'
   }}>
       {src ? (
-          <img src={src} alt="Project" style={{ width: "100%", height: "100%", objectCover: "cover" }} />
+          <img src={src} alt="Project" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
       ) : (
           <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 4 }}>
               <span className="material-symbols-outlined" style={{ fontSize: 24, color: "#cbd5e1" }}>image</span>
@@ -342,17 +362,17 @@ const EmployerWorks = () => {
                 onClose={() => setIsSuccessModalOpen(false)} 
             />
             <style>{styles}</style>
-            <div style={{ background: "#f7f8f5", minHeight: "100vh", padding: "28px 32px" }}>
+            <div className="page-content" style={{ background: "#f7f8f5", minHeight: "100vh", padding: "28px 32px" }}>
                 <div style={{ maxWidth: 900, margin: "0 auto" }}>
 
                     {/* Header */}
-                    <div style={{ background: "white", borderRadius: 20, padding: "28px 32px", marginBottom: 24, border: "1px solid #f3f4f6", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 24 }}>
+                    <div className="header-card" style={{ background: "white", borderRadius: 20, padding: "28px 32px", marginBottom: 24, border: "1px solid #f3f4f6", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 24 }}>
                         <div style={{ flex: 1 }}>
                             <h1 style={{ fontSize: 26, fontWeight: 900, letterSpacing: "-0.03em", marginBottom: 4, margin: 0 }}>Work Management</h1>
                             <p style={{ fontSize: 12, color: "#9ca3af", lineHeight: 1.6, maxWidth: 360, marginTop: 6, marginBottom: 20 }}>
                                 Oversee active sessions, approve new requests, and manage your operational flow in real-time.
                             </p>
-                            <div style={{ display: "flex", gap: 24, alignItems: "center" }}>
+                            <div className="stats-container" style={{ display: "flex", gap: 24, alignItems: "center" }}>
                                 {[[totalVisibleRelevant.toString().padStart(2, '0'), "Total", primary],
                                 [activeCount.toString().padStart(2, '0'), "Active", "#161811"],
                                 [completedCount.toString().padStart(2, '0'), "Completed", "#161811"]].map(([val, label, color], i) => (
@@ -386,8 +406,8 @@ const EmployerWorks = () => {
                     </div>
 
                     {/* Tabs */}
-                    <div style={{ marginBottom: 24 }}>
-                        <div style={{ display: "inline-flex", padding: 4, background: "white", borderRadius: 12, border: "1px solid #f3f4f6" }}>
+                    <div className="tabs-wrapper" style={{ marginBottom: 24 }}>
+                        <div className="tabs-container" style={{ display: "inline-flex", padding: 4, background: "white", borderRadius: 12, border: "1px solid #f3f4f6" }}>
                             {TABS.map(t => (
                                 <button key={t} className={`tab-btn${activeTab === t ? " active" : ""}`} onClick={() => setActiveTab(t)}>{t}</button>
                             ))}
@@ -404,8 +424,8 @@ const EmployerWorks = () => {
 
                             {activeJobs.map(job => (
                                 <div key={job.id} alt="Active Job Card" className="work-card">
-                                    <div style={{ display: "flex" }}>
-                                        <div style={{ width: 220, padding: "24px 20px", background: "#fafafa", borderRight: "1px solid #f3f4f6", flexShrink: 0 }}>
+                                    <div className="work-card-inner" style={{ display: "flex" }}>
+                                        <div className="work-card-sidebar" style={{ width: 220, padding: "24px 20px", background: "#fafafa", borderRight: "1px solid #f3f4f6", flexShrink: 0 }}>
                                             <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 16 }}>
                                                 <Avatar src={job.worker_profile_image} size={52} />
                                                 <div>
@@ -429,7 +449,7 @@ const EmployerWorks = () => {
                                         </div>
 
                                         <div style={{ flex: 1, padding: "24px" }}>
-                                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 20 }}>
+                                            <div className="work-card-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 20 }}>
                                                 <div>
                                                     <div style={{ fontSize: 9, fontWeight: 700, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 10 }}>Material Notes Checklist</div>
                                                     <JobChecklist jobId={job.id} />
@@ -459,8 +479,8 @@ const EmployerWorks = () => {
                                                 </div>
                                             </div>
 
-                                            <div style={{ borderTop: "1px solid #f3f4f6", paddingTop: 16, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
-                                                <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                                            <div className="work-card-footer" style={{ borderTop: "1px solid #f3f4f6", paddingTop: 16, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
+                                                <div className="footer-stats" style={{ display: "flex", alignItems: "center", gap: 16 }}>
                                                     <div>
                                                         <div style={{ fontSize: 9, fontWeight: 700, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.1em" }}>Hourly Rate</div>
                                                         <div style={{ fontSize: 14, fontWeight: 700 }}>₹{job.contract_hourly_rate || job.hourly_rate}</div>
@@ -494,8 +514,8 @@ const EmployerWorks = () => {
                             {startingJobs.map(job => (
                                 <div key={job.id} alt="Start Request Card" style={{ background: "white", borderRadius: 16, border: `2px solid ${primary}50`, overflow: "hidden", position: "relative", marginBottom: 24 }}>
                                     <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, ${primary}60, ${primary}, ${primary}60)` }} />
-                                    <div style={{ display: "flex" }}>
-                                        <div style={{ width: 220, padding: "24px 20px", background: `${primary}08`, borderRight: `1px solid ${primary}20`, flexShrink: 0 }}>
+                                    <div className="work-card-inner" style={{ display: "flex" }}>
+                                        <div className="work-card-sidebar" style={{ width: 220, padding: "24px 20px", background: `${primary}08`, borderRight: `1px solid ${primary}20`, flexShrink: 0 }}>
                                             <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 16 }}>
                                                 <Avatar src={job.worker_profile_image} size={52} border={primary} />
                                                 <div>
@@ -514,7 +534,7 @@ const EmployerWorks = () => {
                                         </div>
 
                                         <div style={{ flex: 1, padding: "24px" }}>
-                                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 16 }}>
+                                            <div className="work-card-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 16 }}>
                                                 <div>
                                                     <h4 style={{ fontSize: 16, fontWeight: 900, margin: "0 0 6px", color: "#161811" }}>Worker is ready.</h4>
                                                     <p style={{ fontSize: 12, color: "#9ca3af", lineHeight: 1.6, margin: 0 }}>
@@ -526,7 +546,7 @@ const EmployerWorks = () => {
                                                     <JobChecklist jobId={job.id} />
                                                 </div>
                                             </div>
-                                            <div style={{ borderTop: "1px solid #f3f4f6", paddingTop: 14, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
+                                            <div className="work-card-footer" style={{ borderTop: "1px solid #f3f4f6", paddingTop: 14, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
                                                 <div>
                                                     <div style={{ fontSize: 9, fontWeight: 700, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.1em" }}>Contract Rate</div>
                                                     <div style={{ fontSize: 18, fontWeight: 900, color: primary }}>₹{job.contract_hourly_rate || job.hourly_rate}/hr</div>
@@ -553,8 +573,8 @@ const EmployerWorks = () => {
 
                             {acceptedJobs.map(job => (
                                 <div key={job.id} alt="Accepted Job Card" className="work-card">
-                                    <div style={{ display: "flex" }}>
-                                        <div style={{ width: 220, padding: "24px 20px", background: "#eff6ff", borderRight: "1px solid #f3f4f6", flexShrink: 0 }}>
+                                    <div className="work-card-inner" style={{ display: "flex" }}>
+                                        <div className="work-card-sidebar" style={{ width: 220, padding: "24px 20px", background: "#eff6ff", borderRight: "1px solid #f3f4f6", flexShrink: 0 }}>
                                             <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 16 }}>
                                                 <Avatar src={job.worker_profile_image} size={52} border="#60a5fa" />
                                                 <div>
@@ -579,7 +599,7 @@ const EmployerWorks = () => {
                                         </div>
 
                                         <div style={{ flex: 1, padding: "24px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-                                            <div style={{ display: "flex", justifyContent: "space-between", gap: 16 }}>
+                                            <div className="work-card-footer" style={{ display: "flex", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
                                                 <div style={{ flex: 1 }}>
                                                     <h4 style={{ fontSize: 16, fontWeight: 900, margin: "0 0 6px", color: "#161811" }}>{job.description ? job.description.substring(0, 40) + "..." : "Job Offer Accepted"}</h4>
                                                     <p style={{ fontSize: 12, color: "#9ca3af", lineHeight: 1.6, maxWidth: 340, margin: "0 0 12px" }}>
@@ -595,7 +615,7 @@ const EmployerWorks = () => {
                                                     <div style={{ fontSize: 22, fontWeight: 900, color: primary }}>₹{job.base_pay || (job.contract_hourly_rate * (job.estimated_hours || 1))}</div>
                                                 </div>
                                             </div>
-                                            <div style={{ borderTop: "1px solid #f3f4f6", paddingTop: 14, display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 16 }}>
+                                            <div className="work-card-footer" style={{ borderTop: "1px solid #f3f4f6", paddingTop: 14, display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 16, flexWrap: "wrap" }}>
                                                 <div style={{ display: "flex", gap: 8 }}>
                                                     <IconBtn icon="call" /><IconBtn icon="videocam" /><IconBtn icon="chat_bubble" />
                                                 </div>
@@ -618,8 +638,8 @@ const EmployerWorks = () => {
 
                             {completedJobs.map(job => (
                                 <div key={job.id} alt="Completed Job Card" className="work-card" style={{ opacity: 0.8 }}>
-                                    <div style={{ display: "flex" }}>
-                                        <div style={{ width: 220, padding: "24px 20px", background: "#f0fdf4", borderRight: "1px solid #f3f4f6", flexShrink: 0 }}>
+                                    <div className="work-card-inner" style={{ display: "flex" }}>
+                                        <div className="work-card-sidebar" style={{ width: 220, padding: "24px 20px", background: "#f0fdf4", borderRight: "1px solid #f3f4f6", flexShrink: 0 }}>
                                             <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 16 }}>
                                                 <Avatar src={job.worker_profile_image} size={52} border="#4ade80" />
                                                 <div>
@@ -633,7 +653,7 @@ const EmployerWorks = () => {
                                         </div>
 
                                         <div style={{ flex: 1, padding: "24px" }}>
-                                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                                            <div className="work-card-footer" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 16 }}>
                                                 <div>
                                                     <h4 style={{ fontSize: 16, fontWeight: 900, color: "#161811" }}>Workflow Completed</h4>
                                                     <p style={{ fontSize: 12, color: "#9ca3af" }}>Session finished and stored in archive.</p>
@@ -669,7 +689,7 @@ const EmployerWorks = () => {
                     {/* Job Details Modal */}
                     {selectedJob && (
                         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 20 }} onClick={() => setSelectedJob(null)}>
-                            <div style={{ background: 'white', borderRadius: 24, width: '100%', maxWidth: 500, overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }} onClick={e => e.stopPropagation()}>
+                            <div className="modal-content" style={{ background: 'white', borderRadius: 24, width: '100%', maxWidth: 500, overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }} onClick={e => e.stopPropagation()}>
                                 <div style={{ position: 'relative', height: 200 }}>
                                     <div style={{ height: '100%', width: '100%', background: selectedJob.project_image ? `url(${selectedJob.project_image})` : '#f3f4f6', backgroundSize: 'cover', backgroundPosition: 'center' }}>
                                         {!selectedJob.project_image && <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span className="material-symbols-outlined" style={{ fontSize: 48, color: '#e5e7eb' }}>image</span></div>}

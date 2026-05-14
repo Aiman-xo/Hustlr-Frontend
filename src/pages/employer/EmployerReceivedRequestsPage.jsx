@@ -43,8 +43,8 @@ const EmployerReceivedRequestsPage = () => {
     };
 
     return (
-        <div className="max-w-4xl mx-auto px-6 py-8">
-            <header className="mb-8 flex justify-between items-end">
+        <div className="max-w-4xl mx-auto px-5 md:px-6 py-6 md:py-8">
+            <header className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
                 <div>
                     <h2 className="text-2xl font-extrabold tracking-tight text-gray-900">
                         Received Requests
@@ -54,7 +54,7 @@ const EmployerReceivedRequestsPage = () => {
                     </p>
                 </div>
                 {interestRequests.length > 0 && (
-                    <span className="bg-[#8ad007] text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                    <span className="bg-[#8ad007] text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-sm shadow-[#8ad007]/20">
                         {interestRequests.length} Pending
                     </span>
                 )}
@@ -65,12 +65,12 @@ const EmployerReceivedRequestsPage = () => {
                     <Spinner size="lg" />
                 </div>
             ) : interestRequests.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-20 bg-white rounded-3xl border border-gray-100 shadow-sm">
+                <div className="flex flex-col items-center justify-center py-20 bg-white rounded-3xl border border-gray-100 shadow-sm px-6">
                     <div className="w-16 h-16 rounded-full bg-[#8ad007]/10 flex items-center justify-center mb-4">
                         <span className="material-symbols-outlined text-[#8ad007] text-3xl">inbox</span>
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900">Your Inbox is Empty</h3>
-                    <p className="text-gray-500 text-sm mt-1">No new interests from workers at the moment.</p>
+                    <h3 className="text-lg font-bold text-gray-900 text-center">Your Inbox is Empty</h3>
+                    <p className="text-gray-500 text-sm mt-1 text-center max-w-sm">No new interests from workers at the moment.</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

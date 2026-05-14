@@ -1,4 +1,4 @@
-import React, { useEffect, useRef,useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -24,53 +24,53 @@ const HustlrLogo = ({ size = 32, rounded = "rounded-xl" }) => (
 // ── Custom SVG Icons ────────────────────────────────────────────────────────
 const UserIcon = ({ size = 24 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="#8ad007" strokeWidth="2" strokeLinecap="round">
-    <circle cx="12" cy="8" r="5"/><path d="M2 20c0-6 20-6 20 0"/>
+    <circle cx="12" cy="8" r="5" /><path d="M2 20c0-6 20-6 20 0" />
   </svg>
 );
 
 const CheckIcon = ({ size = 24 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="#8ad007" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="3" width="18" height="18" rx="4"/><polyline points="7,12 10,16 17,8"/>
+    <rect x="3" y="3" width="18" height="18" rx="4" /><polyline points="7,12 10,16 17,8" />
   </svg>
 );
 
 const MoneyIcon = ({ size = 24 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="#8ad007" strokeWidth="2" strokeLinecap="round">
-    <circle cx="12" cy="12" r="10"/><text x="12" y="17" fontSize="13" fontWeight="600" fill="#8ad007" textAnchor="middle" stroke="none">₹</text>
+    <circle cx="12" cy="12" r="10" /><text x="12" y="17" fontSize="13" fontWeight="600" fill="#8ad007" textAnchor="middle" stroke="none">₹</text>
   </svg>
 );
 
 const ShieldIcon = ({ size = 24 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="#8ad007" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M12 2L22 7v6c0 6-5 10-10 12C7 23 2 19 2 13V7z"/><polyline points="9,12 11,14 16,9"/>
+    <path d="M12 2L22 7v6c0 6-5 10-10 12C7 23 2 19 2 13V7z" /><polyline points="9,12 11,14 16,9" />
   </svg>
 );
 
 const BoltIcon = ({ size = 24 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="#8ad007" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <polygon points="13,2 3,14 12,14 11,22 21,10 12,10"/>
+    <polygon points="13,2 3,14 12,14 11,22 21,10 12,10" />
   </svg>
 );
 
 const NetworkIcon = ({ size = 24 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="#8ad007" strokeWidth="2" strokeLinecap="round">
-    <circle cx="12" cy="5" r="3"/><circle cx="5" cy="19" r="3"/><circle cx="19" cy="19" r="3"/>
-    <line x1="12" y1="8" x2="5" y2="16"/><line x1="12" y1="8" x2="19" y2="16"/>
-    <line x1="8" y1="19" x2="16" y2="19"/>
+    <circle cx="12" cy="5" r="3" /><circle cx="5" cy="19" r="3" /><circle cx="19" cy="19" r="3" />
+    <line x1="12" y1="8" x2="5" y2="16" /><line x1="12" y1="8" x2="19" y2="16" />
+    <line x1="8" y1="19" x2="16" y2="19" />
   </svg>
 );
 
 const MiniBoltIcon = ({ size = 16 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="#8ad007" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <polygon points="13,2 3,14 12,14 11,22 21,10 12,10"/>
+    <polygon points="13,2 3,14 12,14 11,22 21,10 12,10" />
   </svg>
 );
 
 const BriefcaseIcon = ({ size = 18 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="#8ad007" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="2" y="7" width="20" height="14" rx="3"/>
-    <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
-    <line x1="2" y1="13" x2="22" y2="13"/>
+    <rect x="2" y="7" width="20" height="14" rx="3" />
+    <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+    <line x1="2" y1="13" x2="22" y2="13" />
   </svg>
 );
 
@@ -90,7 +90,7 @@ const HustlrLanding = () => {
         const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
         const response = await axios.get(`${apiUrl}/api/platform-stats/`);
         const data = response.data;
-        
+
         setStats({
           totalUsers: data.total_users > 1000 ? (data.total_users / 1000).toFixed(1) + 'k+' : data.total_users,
           jobsCompleted: data.jobs_completed > 1000 ? (data.jobs_completed / 1000).toFixed(1) + 'k+' : data.jobs_completed,
@@ -106,7 +106,7 @@ const HustlrLanding = () => {
   }, []);
 
   return (
-    <div style={{ fontFamily: "'Manrope', sans-serif", background: '#f8f9f5', color: '#1c230f', overflowX: 'hidden' }}>
+    <div style={{ fontFamily: "'Manrope', sans-serif", background: '#f8f9f5', color: '#1c230f', overflowX: 'hidden', position: 'relative' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&display=swap');
 
@@ -315,11 +315,101 @@ const HustlrLanding = () => {
           justify-content: center;
           flex-shrink: 0;
         }
+
+        /* --- Responsive Layout Utilities --- */
+        .responsive-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 80px;
+        }
+
+        .stats-container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .features-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 20px;
+        }
+
+        .footer-content {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          flex-wrap: wrap;
+          gap: 32px;
+        }
+
+        .footer-bottom {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 12px;
+        }
+
+        @media (max-width: 1024px) {
+          .responsive-grid {
+            gap: 40px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .responsive-grid {
+            grid-template-columns: 1fr;
+            gap: 60px;
+            text-align: center;
+          }
+          .hero-text-block {
+            align-items: center !important;
+          }
+          .hero-title {
+            font-size: 42px !important;
+          }
+          .hero-desc {
+            max-width: 100% !important;
+          }
+          .hero-cta {
+            justify-content: center !important;
+          }
+          .stats-container {
+            flex-direction: column;
+            gap: 0;
+          }
+          .divider-line {
+            display: none;
+          }
+          .features-grid {
+            grid-template-columns: 1fr;
+          }
+          .footer-content {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+          }
+          .footer-links-container {
+            justify-content: center !important;
+            gap: 40px !important;
+          }
+          .footer-bottom {
+            flex-direction: column;
+            text-align: center;
+          }
+          .how-step {
+            text-align: left;
+          }
+          .header-container {
+            padding: 0 20px !important;
+          }
+        }
       `}</style>
 
       {/* ── Navigation ───────────────────────────────────────────────── */}
       <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, padding: '18px 0' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div className="header-container" style={{ maxWidth: 1200, margin: '0 auto', padding: '0 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <HustlrLogo size={34} />
             <span style={{ fontWeight: 900, fontSize: 18, letterSpacing: '-0.02em' }}>Hustlr</span>
@@ -334,38 +424,38 @@ const HustlrLanding = () => {
         <div className="blob" style={{ width: 400, height: 400, background: '#b5e64a', bottom: '-100px', right: '-80px' }} />
 
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 32px', width: '100%' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }}>
+          <div className="responsive-grid" style={{ alignItems: 'center' }}>
 
             {/* Left: Text */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+            <div className="hero-text-block" style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
               <div className="pill-badge">
                 <span className="ping-dot"><span /><span /></span>
                 {stats.activeJobs} Active Gigs Live
               </div>
 
-              <h1 style={{ fontSize: 56, fontWeight: 900, lineHeight: 1.05, letterSpacing: '-0.03em', margin: 0 }}>
+              <h1 className="hero-title" style={{ fontSize: 56, fontWeight: 900, lineHeight: 1.05, letterSpacing: '-0.03em', margin: 0 }}>
                 Hire Talent.<br />
                 Get Work.<br />
                 <span style={{ color: '#89cf07' }}>Instantly.</span>
               </h1>
 
-              <p style={{ fontSize: 17, color: '#52525b', lineHeight: 1.7, margin: 0, maxWidth: 420, fontWeight: 500 }}>
+              <p className="hero-desc" style={{ fontSize: 17, color: '#52525b', lineHeight: 1.7, margin: 0, maxWidth: 420, fontWeight: 500 }}>
                 The high-velocity marketplace connecting verified professionals with ambitious projects — no middlemen, no delays.
               </p>
 
-              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              <div className="hero-cta" style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                 <button className="btn-primary" onClick={() => nav('/role')}>Get Started — It's Free</button>
                 <button className="btn-secondary" onClick={() => nav('/login')}>Sign In</button>
               </div>
 
               {/* Social proof */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 16, paddingTop: 8 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 16, paddingTop: 8 }} className="hero-cta">
                 <div style={{ display: 'flex', marginRight: 4 }}>
                   {['#a8c070', '#89cf07', '#6aaa00', '#b5e64a'].map((c, i) => (
                     <div key={i} style={{ width: 28, height: 28, borderRadius: '50%', background: c, border: '2px solid #f8f9f5', marginLeft: i > 0 ? -8 : 0 }} />
                   ))}
                 </div>
-                <div>
+                <div style={{ textAlign: 'left' }}>
                   <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: '#1c230f' }}>{stats.totalUsers} Hustlrs</p>
                   <p style={{ margin: 0, fontSize: 12, color: '#71717a', fontWeight: 500 }}>already on the platform</p>
                 </div>
@@ -454,9 +544,9 @@ const HustlrLanding = () => {
                 <div style={{ position: 'absolute', bottom: 24, left: 24, zIndex: 2 }}>
                   <div className="glass-card" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     <div style={{ width: 34, height: 34, borderRadius: 10, background: '#89cf07', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <svg width={17} height={17} viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-  <polygon points="13,2 3,14 12,14 11,22 21,10 12,10"/>
-</svg>
+                      <svg width={17} height={17} viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polygon points="13,2 3,14 12,14 11,22 21,10 12,10" />
+                      </svg>
                     </div>
                     <div>
                       <p style={{ margin: 0, color: '#89cf07', fontSize: 9, fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase' }}>Just Matched</p>
@@ -467,7 +557,7 @@ const HustlrLanding = () => {
               </div>
 
               {/* Floating stat card */}
-              <div className="floating-card" style={{ top: 24, right: -20, animationDelay: '0s',borderRadius:"5px" }}>
+              <div className="floating-card" style={{ top: 24, right: -20, animationDelay: '0s', borderRadius: "5px" }}>
                 <div style={{ width: 36, height: 36, borderRadius: 4, background: 'rgba(137,207,7,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <BriefcaseIcon size={20} />
                 </div>
@@ -496,7 +586,7 @@ const HustlrLanding = () => {
 
       {/* ── Stats Strip ──────────────────────────────────────────────── */}
       <section style={{ background: '#fff', borderTop: '1px solid rgba(28,35,15,0.06)', borderBottom: '1px solid rgba(28,35,15,0.06)', padding: '20px 0' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 32px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 0 }}>
+        <div className="stats-container" style={{ maxWidth: 1200, margin: '0 auto', padding: '0 32px' }}>
           {[
             { label: 'Active Hustlrs', value: stats.totalUsers, icon: <UserIcon size={22} /> },
             { label: 'Jobs Completed', value: stats.jobsCompleted, icon: <CheckIcon size={22} /> },
@@ -526,7 +616,7 @@ const HustlrLanding = () => {
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
+        <div className="features-grid">
           {[
             {
               icon: <ShieldIcon size={24} />,
@@ -557,8 +647,8 @@ const HustlrLanding = () => {
 
       {/* ── How it Works ─────────────────────────────────────────────── */}
       <section style={{ background: '#fff', padding: '100px 32px' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }}>
-          <div>
+        <div className="responsive-grid" style={{ maxWidth: 1200, margin: '0 auto', alignItems: 'center' }}>
+          <div style={{ textAlign: 'left' }}>
             <div className="pill-badge" style={{ marginBottom: 24 }}>How it Works</div>
             <h2 style={{ fontSize: 40, fontWeight: 900, letterSpacing: '-0.03em', margin: '0 0 48px', lineHeight: 1.1 }}>
               Up and running<br />in minutes
@@ -606,7 +696,7 @@ const HustlrLanding = () => {
       {/* ── Footer ───────────────────────────────────────────────────── */}
       <footer style={{ background: '#f8f9f5', borderTop: '1px solid rgba(28,35,15,0.06)', padding: '60px 32px 32px' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 48, flexWrap: 'wrap', gap: 32 }}>
+          <div className="footer-content">
             <div style={{ maxWidth: 280 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
                 <HustlrLogo size={30} rounded="rounded-lg" />
@@ -616,7 +706,7 @@ const HustlrLanding = () => {
                 The modern standard for professional services. Secure, fast, and fair.
               </p>
             </div>
-            <div style={{ display: 'flex', gap: 60, flexWrap: 'wrap' }}>
+            <div className="footer-links-container" style={{ display: 'flex', gap: 60, flexWrap: 'wrap' }}>
               {[
                 { title: 'Platform', links: ['Browse Jobs', 'Post a Job', 'Pricing'] },
                 { title: 'Company', links: ['About', 'Blog', 'Careers'] },
@@ -634,7 +724,7 @@ const HustlrLanding = () => {
             </div>
           </div>
 
-          <div style={{ borderTop: '1px solid rgba(28,35,15,0.06)', paddingTop: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
+          <div className="footer-bottom" style={{ borderTop: '1px solid rgba(28,35,15,0.06)', paddingTop: 24, marginTop: 48 }}>
             <p style={{ margin: 0, color: '#a1a1aa', fontSize: 12, fontWeight: 600 }}>© 2025 Hustlr. All rights reserved.</p>
             <div style={{ display: 'flex', gap: 24 }}>
               <span className="footer-link" style={{ fontSize: 12 }}>Terms</span>

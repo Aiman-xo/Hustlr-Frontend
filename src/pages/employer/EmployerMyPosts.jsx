@@ -40,12 +40,53 @@ export default function EmployerMyPosts() {
     setPostToDelete(null);
   };
 
+  const styles = `
+    .mobile-delete-btn {
+      display: none;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(8px);
+      color: #ef4444;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      z-index: 10;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .mobile-delete-btn:active {
+      transform: scale(0.85);
+      background: #ef4444;
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      .my-posts-container { padding: 20px 16px !important; }
+      .my-posts-header { flex-direction: column; align-items: flex-start !important; gap: 8px; }
+      .mobile-delete-btn { display: flex; }
+      .desktop-overlay { display: none !important; }
+      .posts-grid { grid-template-columns: 1fr 1fr !important; gap: 12px !important; }
+    }
+
+    @media (max-width: 480px) {
+      .posts-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
+    }
+  `;
+
   return (
-    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#f9fafb", minHeight: "100%", padding: "24px" }}>
+    <div className="my-posts-container" style={{ fontFamily: "'Manrope', sans-serif", background: "#f9fafb", minHeight: "100%", padding: "24px" }}>
+      <style>{styles}</style>
       <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
         
         {/* Header */}
-        <header style={{ marginBottom: 24, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <header className="my-posts-header" style={{ marginBottom: 24, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div>
             <h1 style={{ fontSize: 24, fontWeight: 900, color: "#161811", margin: 0 }}>My Posts</h1>
             <p style={{ color: "#7c8c5f", fontSize: 13, marginTop: 4 }}>Manage and view all your active job postings.</p>
@@ -56,12 +97,12 @@ export default function EmployerMyPosts() {
         {loading ? (
            <p style={{ textAlign: "center", color: "#7c8c5f", marginTop: 40 }}>Loading posts...</p>
         ) : myJobPosts.length === 0 ? (
-           <div style={{ textAlign: "center", padding: "60px 0", background: "#fff", borderRadius: 16, border: "1px solid #e2e6db" }}>
+           <div style={{ textAlign: "center", padding: "60px 20px", background: "#fff", borderRadius: 16, border: "1px solid #e2e6db" }}>
              <span className="material-symbols-outlined" style={{ fontSize: 48, color: "#c8d8a0", marginBottom: 12 }}>grid_view</span>
-             <p style={{ color: "#7c8c5f", fontWeight: 600 }}>No posts created yet.</p>
+             <p style={{ color: "#7c8c5f", fontWeight: 600, margin: 0 }}>No posts created yet.</p>
            </div>
         ) : (
-          <div style={{
+          <div className="posts-grid" style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
             gap: 16
@@ -86,6 +127,14 @@ export default function EmployerMyPosts() {
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
 
+                {/* Persistent Delete Button for Mobile */}
+                <button 
+                  className="mobile-delete-btn active:scale-90 transition-transform"
+                  onClick={(e) => { e.stopPropagation(); handleDeleteClick(post); }}
+                >
+                  <span className="material-symbols-outlined" style={{ fontSize: 20 }}>delete</span>
+                </button>
+
                 {/* Info Bar (shows at bottom constantly) */}
                 <div style={{
                   position: "absolute",
@@ -94,7 +143,8 @@ export default function EmployerMyPosts() {
                   right: 0,
                   background: "linear-gradient(transparent, rgba(0,0,0,0.7))",
                   padding: "20px 12px 10px",
-                  color: "#fff"
+                  color: "#fff",
+                  zIndex: 2
                 }}>
                   <h3 style={{ fontSize: 13, fontWeight: 800, margin: "0 0 2px 0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                     {post.title}
@@ -102,29 +152,31 @@ export default function EmployerMyPosts() {
                   <p style={{ fontSize: 10, margin: 0, opacity: 0.9 }}>{post.city}</p>
                 </div>
 
-                {/* Hover Overlay with Delete Button */}
+                {/* Hover Overlay with Delete Button (Desktop) */}
                 <div 
-                  className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-200"
+                  className="desktop-overlay absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all duration-300 z-20"
                 >
                   <button 
                     onClick={() => handleDeleteClick(post)}
                     style={{
-                      background: "#ef4444", // Red for destructive
-                      color: "#fff",
+                      background: "rgba(255, 255, 255, 0.95)",
+                      color: "#ef4444",
                       border: "none",
-                      padding: "8px 16px",
-                      borderRadius: 20,
-                      fontWeight: 800,
-                      fontSize: 12,
+                      padding: "10px 20px",
+                      borderRadius: "14px",
+                      fontWeight: 900,
+                      fontSize: "12px",
                       cursor: "pointer",
                       display: "flex",
                       alignItems: "center",
-                      gap: 6,
-                      boxShadow: "0 4px 12px rgba(239, 68, 68, 0.4)"
+                      gap: 8,
+                      boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
+                      transform: "translateY(10px)",
+                      transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
                     }}
-                    className="hover:scale-105 active:scale-95 transition-transform"
+                    className="hover:bg-[#ef4444] hover:text-white hover:-translate-y-1 transition-all"
                   >
-                    <span className="material-symbols-outlined" style={{ fontSize: 16 }}>delete</span>
+                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>delete</span>
                     Delete Post
                   </button>
                 </div>
@@ -143,9 +195,9 @@ export default function EmployerMyPosts() {
           background: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center",
           zIndex: 9999
         }}>
-          <div style={{
+          <div className="modal-content" style={{
             background: "#fff", padding: 32, borderRadius: 20, width: "100%", maxWidth: 360,
-            boxShadow: "0 10px 40px rgba(0,0,0,0.1)", textAlign: "center"
+            boxShadow: "0 10px 40px rgba(0,0,0,0.1)", textAlign: "center", margin: "16px"
           }}>
             <div style={{ width: 56, height: 56, borderRadius: "50%", background: "#fee2e2", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
               <span className="material-symbols-outlined" style={{ color: "#ef4444", fontSize: 28 }}>warning</span>

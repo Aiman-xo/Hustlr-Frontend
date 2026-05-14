@@ -91,7 +91,7 @@ function RequestCard({ req }) {
       )}
 
       {/* Image Panel */}
-      <div className="w-full md:w-56 h-36 md:h-auto bg-gray-100 relative group flex-shrink-0 cursor-pointer">
+      <div className="w-full md:w-56 h-40 md:h-auto bg-gray-100 relative group flex-shrink-0 cursor-pointer">
         {req.project_image ? (
           <img
             src={req.project_image}
@@ -99,7 +99,7 @@ function RequestCard({ req }) {
             className="w-full h-full object-cover"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gray-50 min-h-[9rem]">
+          <div className="w-full h-full flex items-center justify-center bg-gray-50 min-h-[10rem]">
             <span className="material-symbols-outlined text-gray-300 text-4xl">
               image
             </span>
@@ -314,6 +314,19 @@ export default function WorkRequests() {
   const { allJobRequests, totalCount, hasNext, hasPrevious } = useSelector((state) => state.employer)
   const [currentPage, setCurrentPage] = useState(1);
   const [currentStatus, setCurrentStatus] = useState('');
+  const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
+
+  const TABS = [
+    { label: 'All Requests', value: '' },
+    { label: 'Pending', value: 'pending' },
+    { label: 'Cancelled', value: 'cancelled' },
+    { label: 'Accepted', value: 'accepted' },
+    { label: 'Starting', value: 'starting' },
+    { label: 'In Progress', value: 'in_progress' },
+    { label: 'Completed', value: 'completed' }
+  ];
+
+  const currentLabel = TABS.find(t => t.value === currentStatus)?.label || 'All Requests';
 
 
   useEffect(() => {
@@ -321,9 +334,9 @@ export default function WorkRequests() {
   }, [dispatch, currentPage, currentStatus])
 
   // Calculate pagination numbers
-  const itemsPerPage = 5; // Adjust this to match your backend pagination limit
+  const itemsPerPage = 10; 
   const startIndex = (currentPage - 1) * itemsPerPage + 1;
-  const endIndex = Math.min(currentPage * itemsPerPage, totalCount);
+  const endIndex = (currentPage - 1) * itemsPerPage + allJobRequests.length;
 
   const handleFilterChange = (status) => {
     setCurrentStatus(status);
@@ -345,7 +358,7 @@ export default function WorkRequests() {
   return (
     <div className="max-w-4xl mx-auto px-6 py-8">
       {/* Page Header */}
-      <header className="mb-8 flex justify-between items-end">
+      <header className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
         <div>
           <h2 className="text-2xl font-extrabold tracking-tight text-gray-900">
             Work Requests
@@ -354,30 +367,67 @@ export default function WorkRequests() {
             Manage your outgoing job requests and invitations.
           </p>
         </div>
-        <div className="flex gap-2">
-          {[
-            { label: 'All Requests', value: '' },
-            { label: 'Pending', value: 'pending' },
-            { label: 'Cancelled', value: 'cancelled' },
-            { label: 'Accepted', value: 'accepted' },
-            { label: 'Starting', value: 'starting' },
-            { label: 'In Progress', value: 'in_progress' },
-            { label: 'Completed', value: 'completed' }
-          ].map((tab) => (
+        <div className="relative w-full md:w-auto">
+          {/* Mobile Filter Dropdown */}
+          <div className="md:hidden w-full">
             <button
-              key={tab.value}
-              onClick={() => handleFilterChange(tab.value)}
-              className="px-2 py-2 border rounded-sm font-bold text-[9px] shadow-sm transition-all cursor-pointer"
-              style={{
-                // Use your primary greenish color when active
-                backgroundColor: currentStatus === tab.value ? "#8ad007" : "white",
-                color: currentStatus === tab.value ? "white" : "#94a3b8", // gray-400
-                borderColor: currentStatus === tab.value ? "#8ad007" : "#e5e7eb" // gray-200
-              }}
+              onClick={() => setIsFilterMenuOpen(!isFilterMenuOpen)}
+              className="w-full flex items-center justify-between px-5 py-3.5 bg-white border border-gray-200 rounded-xl font-bold text-xs shadow-sm transition-all active:scale-[0.98]"
             >
-              {tab.label}
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#8ad007" }}></span>
+                <span className="text-gray-900">{currentLabel}</span>
+              </div>
+              <span className="material-symbols-outlined text-gray-400 transition-transform duration-300" style={{ transform: isFilterMenuOpen ? 'rotate(180deg)' : 'none' }}>
+                expand_more
+              </span>
             </button>
-          ))}
+            
+            {isFilterMenuOpen && (
+              <>
+                <div className="fixed inset-0 z-40 bg-black/5" onClick={() => setIsFilterMenuOpen(false)}></div>
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                  {TABS.map((tab) => (
+                    <button
+                      key={tab.value}
+                      onClick={() => {
+                        handleFilterChange(tab.value);
+                        setIsFilterMenuOpen(false);
+                      }}
+                      className="w-full text-left px-5 py-4 text-xs font-bold transition-colors flex items-center justify-between group"
+                      style={{
+                        color: currentStatus === tab.value ? "#8ad007" : "#64748b",
+                        backgroundColor: currentStatus === tab.value ? "#f7fee7" : "transparent"
+                      }}
+                    >
+                      <span>{tab.label}</span>
+                      {currentStatus === tab.value && (
+                        <span className="material-symbols-outlined text-sm">check</span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Desktop Tabs */}
+          <div className="hidden md:flex gap-2">
+            {TABS.map((tab) => (
+              <button
+                key={tab.value}
+                onClick={() => handleFilterChange(tab.value)}
+                className="px-3 py-2 border rounded-lg font-bold text-[10px] shadow-sm transition-all cursor-pointer whitespace-nowrap"
+                style={{
+                  backgroundColor: currentStatus === tab.value ? "#8ad007" : "white",
+                  color: currentStatus === tab.value ? "white" : "#94a3b8",
+                  borderColor: currentStatus === tab.value ? "#8ad007" : "#e5e7eb"
+                }}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
       </header>
 
@@ -402,8 +452,8 @@ export default function WorkRequests() {
                 folder_open
               </span>
             </div>
-            <h3 className="text-lg font-bold text-gray-900">No {currentStatus} requests</h3>
-            <p className="text-gray-500 text-sm mt-1">
+            <h3 className="text-lg font-bold text-gray-900 text-center px-6">No {currentStatus} requests</h3>
+            <p className="text-gray-500 text-sm mt-1 text-center px-6 max-w-sm">
               {currentStatus
                 ? `You don't have any requests marked as ${currentStatus} at the moment.`
                 : "You haven't sent any work requests yet."}
@@ -424,9 +474,7 @@ export default function WorkRequests() {
       {allJobRequests.length > 0 && (
         <div className="mt-10 flex flex-col md:flex-row items-center justify-between border-t border-gray-100 pt-6 gap-4">
           <div className="text-xs font-medium text-gray-500 order-2 md:order-1">
-            <div className="text-xs font-medium text-gray-500 order-2 md:order-1">
-              Showing <span className="text-gray-900 font-bold">{endIndex}</span> of <span className="text-gray-900 font-bold">{totalCount}</span> requests
-            </div>
+            Showing <span className="text-gray-900 font-bold">{startIndex}–{endIndex}</span> of <span className="text-gray-900 font-bold">{totalCount}</span> requests
           </div>
 
           <div className="flex gap-2 order-1 md:order-2">

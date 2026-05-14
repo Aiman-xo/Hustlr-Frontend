@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../../../redux/slice/authSlice';
 import { FetchInterestRequests } from '../../../redux/slice/employerSlice';
 
-const EmployerSidebar = () => {
+const EmployerSidebar = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { interestRequests } = useSelector(state => state.employer);
@@ -42,25 +42,33 @@ const EmployerSidebar = () => {
   };
 
   return (
-    <aside className="w-64 h-screen bg-white border-r border-[#e2e6db] flex flex-col">
+    <aside className={`fixed md:relative z-50 w-64 h-screen bg-white border-r border-[#e2e6db] flex flex-col transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
 
-      {/* Logo */}
-      <div className="p-5 flex items-center gap-2.5">
-         <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" className="w-9 h-9">
-            <rect x="50" y="50" width="300" height="300" rx="60" fill="#8ad007"/>
-            <g transform="translate(200, 200)">
-              <circle cx="0" cy="0" r="18" fill="#ffffff"/>
-              <rect x="-8" y="-72" width="16" height="57" rx="8" fill="#ffffff"/>
-              <rect x="-8" y="15" width="16" height="57" rx="8" fill="#ffffff"/>
-              <rect x="-72" y="-8" width="57" height="16" rx="8" fill="#ffffff"/>
-              <rect x="15" y="-8" width="57" height="16" rx="8" fill="#ffffff"/>
-              <rect x="-8" y="-57" width="16" height="42" rx="8" fill="#ffffff" transform="rotate(45 0 0)"/>
-              <rect x="-8" y="-57" width="16" height="42" rx="8" fill="#ffffff" transform="rotate(135 0 0)"/>
-              <rect x="-8" y="-57" width="16" height="42" rx="8" fill="#ffffff" transform="rotate(225 0 0)"/>
-              <rect x="-8" y="-57" width="16" height="42" rx="8" fill="#ffffff" transform="rotate(315 0 0)"/>
-            </g>
-          </svg>
-        <h2 className="text-md font-extrabold tracking-tight text-[#161811]">Hustlr</h2>
+      {/* Logo & Close Button */}
+      <div className="p-5 flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+           <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" className="w-9 h-9">
+              <rect x="50" y="50" width="300" height="300" rx="60" fill="#8ad007"/>
+              <g transform="translate(200, 200)">
+                <circle cx="0" cy="0" r="18" fill="#ffffff"/>
+                <rect x="-8" y="-72" width="16" height="57" rx="8" fill="#ffffff"/>
+                <rect x="-8" y="15" width="16" height="57" rx="8" fill="#ffffff"/>
+                <rect x="-72" y="-8" width="57" height="16" rx="8" fill="#ffffff"/>
+                <rect x="15" y="-8" width="57" height="16" rx="8" fill="#ffffff"/>
+                <rect x="-8" y="-57" width="16" height="42" rx="8" fill="#ffffff" transform="rotate(45 0 0)"/>
+                <rect x="-8" y="-57" width="16" height="42" rx="8" fill="#ffffff" transform="rotate(135 0 0)"/>
+                <rect x="-8" y="-57" width="16" height="42" rx="8" fill="#ffffff" transform="rotate(225 0 0)"/>
+                <rect x="-8" y="-57" width="16" height="42" rx="8" fill="#ffffff" transform="rotate(315 0 0)"/>
+              </g>
+            </svg>
+          <h2 className="text-md font-extrabold tracking-tight text-[#161811]">Hustlr</h2>
+        </div>
+        <button 
+          onClick={onClose}
+          className="md:hidden p-1.5 text-[#7c8c5f] hover:bg-[#f3f5f0] rounded-lg"
+        >
+          <span className="material-symbols-outlined text-xl">close</span>
+        </button>
       </div>
 
       {/* Navigation */}

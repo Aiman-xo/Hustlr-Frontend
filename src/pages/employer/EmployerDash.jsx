@@ -54,16 +54,16 @@ export default function EmployerDash() {
                     onClose={() => setOpenRequestModal(false)}
                 />
             )}
-            <div className="max-w-5xl mx-auto px-6 py-6">
+            <div className="max-w-5xl mx-auto px-4 md:px-6 py-6">
 
                 {/* Header */}
                 <header className="mb-6">
                     <h2 className="text-xl font-extrabold text-gray-900">Welcome back!</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mt-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
                         {stats.map((stat, i) => (
-                            <div key={i} className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-                                <p className="text-gray-500 text-xs">{stat.label}</p>
-                                <h3 className="text-lg font-bold">{stat.value}</h3>
+                            <div key={i} className="bg-white p-3 md:p-4 rounded-xl border border-gray-200 shadow-sm">
+                                <p className="text-gray-500 text-[10px] md:text-xs">{stat.label}</p>
+                                <h3 className="text-base md:text-lg font-bold">{stat.value}</h3>
                             </div>
                         ))}
                     </div>
@@ -72,15 +72,15 @@ export default function EmployerDash() {
                 {/* Search Bar */}
                 <section className="mb-6">
                     <div className="bg-white rounded-xl p-1.5 shadow-sm border" style={{ borderColor: "#8ad00733" }}>
-                        <div className="flex items-center px-3 py-1">
-                            <span className="mr-2">
-                                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="30" height="30">
-                                    <circle cx="42" cy="42" r="22" fill="none" stroke="#8ad007" stroke-width="7" stroke-linecap="round"/>
-                                    <line x1="58" y1="58" x2="76" y2="76" stroke="#8ad007" stroke-width="7" stroke-linecap="round"/>
+                        <div className="flex items-center px-2 md:px-3 py-1 gap-2">
+                            <span className="shrink-0">
+                                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="24" height="24" className="md:w-[30px] md:h-[30px]">
+                                    <circle cx="42" cy="42" r="22" fill="none" stroke="#8ad007" strokeWidth="7" strokeLinecap="round"/>
+                                    <line x1="58" y1="58" x2="76" y2="76" stroke="#8ad007" strokeWidth="7" strokeLinecap="round"/>
                                 </svg>
                             </span>
                             <input
-                                className="flex-1 outline-none text-sm py-2 bg-transparent text-gray-900"
+                                className="flex-1 outline-none text-xs md:text-sm py-2 bg-transparent text-gray-900 min-w-0"
                                 placeholder="Find a worker by name or skill..."
                                 value={searchValue}
                                 onChange={(e) => setSearchValue(e.target.value)}
@@ -88,10 +88,10 @@ export default function EmployerDash() {
                             />
                             <button
                                 onClick={handleSearch}
-                                className="text-white font-bold px-5 py-2 rounded-sm text-sm transition-all active:scale-95 cursor-pointer group"
+                                className="text-white font-bold px-3 md:px-5 py-2 rounded-sm text-xs md:text-sm transition-all active:scale-95 cursor-pointer group flex items-center justify-center shrink-0"
                                 style={{ background: "#8ad007" }}
                             >
-                                    <div className="size-7 text-white shrink-0 transition-transform duration-500 group-hover:rotate-[360deg]">
+                                    <div className="size-5 md:size-7 text-white shrink-0 transition-transform duration-500 group-hover:rotate-[360deg]">
                                         <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="w-full h-full fill-current">
                                             <g transform="translate(50, 50)">
                                                 <circle cx="0" cy="0" r="6" />
@@ -116,27 +116,36 @@ export default function EmployerDash() {
                     <div className="flex items-center justify-between mb-4 px-1">
                         <h2 className="text-sm font-bold text-gray-900">
                             Worker Search Results
-                            <span className="text-gray-400 text-xs font-normal ml-2">({totalCount} workers found)</span>
+                            <span className="text-gray-400 text-[10px] md:text-xs font-normal ml-2">({totalCount} workers found)</span>
                         </h2>
                     </div>
 
                     <div className="grid grid-cols-1 gap-3">
                         {workersList.map((worker) => (
-                            <div key={worker.id} className="group bg-white border border-gray-200 rounded-xl p-4 flex flex-col md:flex-row items-start gap-4 hover:shadow-lg transition-all">
+                            <div key={worker.id} className="group bg-white border border-gray-200 rounded-xl p-4 flex flex-col md:flex-row items-start md:items-center gap-4 hover:shadow-lg transition-all">
                                 
-                                {/* Avatar */}
-                                {worker.avatar ? (
-                                    <div className="w-16 h-16 rounded-xl bg-gray-100 bg-cover bg-center overflow-hidden flex-shrink-0"
-                                         style={{ backgroundImage: `url(${worker.avatar})` }} />
-                                ) : (
-                                    <div className="w-16 h-16 rounded-xl bg-[#8ad007]/10 flex items-center justify-center text-[#8ad007] font-bold text-xl uppercase flex-shrink-0">
-                                        {worker.name?.charAt(0) || "?"}
-                                    </div>
-                                )}
+                                <div className="flex items-center gap-4 w-full md:w-auto">
+                                  {/* Avatar */}
+                                  {worker.avatar ? (
+                                      <div className="w-14 h-14 md:w-16 md:h-16 rounded-xl bg-gray-100 bg-cover bg-center overflow-hidden flex-shrink-0"
+                                           style={{ backgroundImage: `url(${worker.avatar})` }} />
+                                  ) : (
+                                      <div className="w-14 h-14 md:w-16 md:h-16 rounded-xl bg-[#8ad007]/10 flex items-center justify-center text-[#8ad007] font-bold text-lg md:text-xl uppercase flex-shrink-0">
+                                          {worker.name?.charAt(0) || "?"}
+                                      </div>
+                                  )}
+
+                                  <div className="md:hidden flex-1">
+                                      <div className="flex flex-col">
+                                          <h3 className="text-sm font-bold text-gray-900">{worker.name}</h3>
+                                          <span className="text-[10px] text-[#8ad007] font-medium">{worker.city || "Remote"}</span>
+                                      </div>
+                                  </div>
+                                </div>
 
                                 {/* Main Content */}
-                                <div className="flex-1 text-left">
-                                    <div className="flex items-center gap-2">
+                                <div className="flex-1 text-left w-full">
+                                    <div className="hidden md:flex items-center gap-2">
                                         <h3 className="text-sm font-bold text-gray-900">{worker.name}</h3>
                                         <span className="text-xs text-[#8ad007] font-medium">• {worker.city || "Remote"}</span>
                                     </div>
@@ -163,12 +172,12 @@ export default function EmployerDash() {
                                 </div>
 
                                 {/* Rate + CTA */}
-                                <div className="flex flex-col items-end justify-between self-stretch min-w-[110px]">
-                                    <div className="text-right">
-                                        <span className="text-lg font-black text-gray-900">₹{worker.base_Pay}</span>
-                                        <span className="text-gray-500 text-xs ml-0.5">/hr</span>
+                                <div className="flex flex-row md:flex-col items-center md:items-end justify-between self-stretch min-w-[110px] w-full md:w-auto pt-3 md:pt-0 border-t md:border-0 border-gray-100 mt-2 md:mt-0">
+                                    <div className="text-left md:text-right">
+                                        <span className="text-base md:text-lg font-black text-gray-900">₹{worker.base_Pay}</span>
+                                        <span className="text-gray-500 text-[10px] md:text-xs ml-0.5">/hr</span>
                                     </div>
-                                    <button className="w-full text-white font-bold py-2 px-4 text-[10px] rounded-sm active:scale-95 transition-all shadow-sm hover:opacity-90 cursor-pointer" style={{ background: "#8ad007" }}
+                                    <button className="w-auto md:w-full text-white font-bold py-2 px-6 md:px-4 text-[10px] rounded-sm active:scale-95 transition-all shadow-sm hover:opacity-90 cursor-pointer" style={{ background: "#8ad007" }}
                                     onClick={()=>handleOpenModal(worker)}>
                                         Send Request
                                     </button>
