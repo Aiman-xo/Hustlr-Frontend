@@ -237,6 +237,7 @@ const JobCard = ({ job, onUpdateEstimate }) => {
     >
       {/* Card Header */}
       <div
+        className="job-card-header"
         style={{
           background: "#fafbfc",
           borderBottom: "1.5px solid #e2e6db",
@@ -270,6 +271,7 @@ const JobCard = ({ job, onUpdateEstimate }) => {
 
       {/* Card Body */}
       <div
+        className="job-card-body"
         style={{
           padding: "24px",
           display: "grid",
@@ -279,6 +281,7 @@ const JobCard = ({ job, onUpdateEstimate }) => {
       >
         {/* Left Panel */}
         <div
+          className="job-card-left"
           style={{
             borderRight: "1.5px solid #e2e6db",
             paddingRight: "28px",
@@ -647,7 +650,7 @@ const JobCard = ({ job, onUpdateEstimate }) => {
           </div>
 
           {/* Action Buttons */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div className="job-card-actions" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "10px" }}>
             <div style={{ display: "flex", gap: "6px" }}>
               {[
                 { icon: "visibility", label: "View Details" },
@@ -831,6 +834,7 @@ export default function MyJobs() {
     <>
 
       <div
+        className="jobs-container"
         style={{
           minHeight: "100vh",
           background: "#f7f8f5",
@@ -839,6 +843,29 @@ export default function MyJobs() {
           boxSizing: "border-box",
         }}
       >
+        <style>{`
+          @media (max-width: 768px) {
+            .jobs-container { padding: 80px 16px 24px !important; }
+            .job-card-body { 
+              grid-template-columns: 1fr !important; 
+              padding: 16px !important;
+              gap: 24px !important;
+            }
+            .job-card-left {
+              border-right: none !important;
+              padding-right: 0 !important;
+              border-bottom: 1.5px solid #e2e6db;
+              padding-bottom: 24px;
+            }
+            .job-card-header {
+              padding: 12px 16px !important;
+            }
+            .job-card-actions {
+              flex-wrap: wrap;
+              gap: 12px !important;
+            }
+          }
+        `}</style>
         <link
           href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800;900&display=swap"
           rel="stylesheet"

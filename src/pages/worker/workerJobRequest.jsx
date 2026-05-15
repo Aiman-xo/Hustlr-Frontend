@@ -40,7 +40,35 @@ export default function WorkerRequests() {
   }, [dispatch]);
 
   return (
-    <div style={{ fontFamily: "'Manrope', sans-serif", padding: "36px 40px", maxWidth: 1100, margin: "0 auto" }}>
+    <div 
+      className="requests-container"
+      style={{ fontFamily: "'Manrope', sans-serif", padding: "36px 40px", maxWidth: 1100, margin: "0 auto" }}
+    >
+      <style>{`
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @media (max-width: 640px) {
+          .requests-container { padding: 80px 16px 24px !important; }
+          .request-card { 
+            flex-direction: column !important; 
+            gap: 12px !important; 
+            padding: 16px !important;
+          }
+          .request-badge {
+            position: static !important;
+            width: fit-content;
+            margin-bottom: 8px;
+          }
+          .request-actions {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 16px !important;
+          }
+          .request-see-more {
+            width: 100%;
+            justify-content: flex-end;
+          }
+        }
+      `}</style>
       <div style={{ marginBottom: 28 }}>
         <h1 style={{ fontSize: 26, fontWeight: 900, margin: 0 }}>Requests</h1>
         <p style={{ color: "#71717a", fontSize: 12, marginTop: 3 }}>Review and manage your incoming job opportunities.</p>
@@ -102,12 +130,21 @@ function RequestCard({ req, jobData, status }) {
 
   return (
     <>
-      <div style={{ background: "#fff", borderRadius: 18, padding: "20px 22px", border: "1px solid #f4f4f5", display: "flex", gap: 18, position: "relative" }}>
-        <div style={{ position: "absolute", top: 16, right: 16, background: badge.bg, color: badge.color, fontSize: 9, fontWeight: 800, padding: "4px 10px", borderRadius: 99 }}>
+      <div 
+        className="request-card"
+        style={{ background: "#fff", borderRadius: 18, padding: "20px 22px", border: "1px solid #f4f4f5", display: "flex", gap: 18, position: "relative" }}
+      >
+        <div 
+          className="request-badge"
+          style={{ position: "absolute", top: 16, right: 16, background: badge.bg, color: badge.color, fontSize: 9, fontWeight: 800, padding: "4px 10px", borderRadius: 99 }}
+        >
           {badge.label}
         </div>
 
-        <div style={{ width: 50, height: 50, borderRadius: 12, background: "#f4f4f5", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+        <div 
+          className="request-avatar"
+          style={{ width: 50, height: 50, borderRadius: 12, background: "#f4f4f5", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}
+        >
           {req.avatar ? <img src={req.avatar} alt="avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <span className="material-symbols-outlined" style={{ color: "#a1a1aa" }}>person</span>}
         </div>
 
@@ -121,7 +158,7 @@ function RequestCard({ req, jobData, status }) {
             <span style={{ fontSize: 12, fontWeight: 600 }}>{req.location}</span>
           </div>
 
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div className="request-actions" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <div>
               {isProcessing ? (
                 <div style={{ display: "flex", alignItems: "center", gap: 8, color: PRIMARY, fontSize: 12, fontWeight: 700 }}>
@@ -146,7 +183,11 @@ function RequestCard({ req, jobData, status }) {
               )}
             </div>
 
-            <button onClick={() => setOpenDetails(true)} style={{ background: "transparent", border: "none", color: PRIMARY, fontSize: 12, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }}>
+            <button 
+              onClick={() => setOpenDetails(true)} 
+              className="request-see-more"
+              style={{ background: "transparent", border: "none", color: PRIMARY, fontSize: 12, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }}
+            >
               See More <span className="material-symbols-outlined" style={{ fontSize: 16 }}>arrow_forward</span>
             </button>
           </div>
@@ -169,7 +210,7 @@ function RequestCard({ req, jobData, status }) {
 
       {openDetails && <JobDetailsModal isOpen={openDetails} onClose={() => setOpenDetails(false)} job={jobData} />}
 
-      <style>{`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
+
     </>
   );
 }

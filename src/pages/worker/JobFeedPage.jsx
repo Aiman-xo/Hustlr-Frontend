@@ -34,6 +34,7 @@ export default function JobFeedPage() {
 
   return (
     <div
+      className="feed-container"
       style={{
         fontFamily: "'Manrope', sans-serif",
         minHeight: "100vh",
@@ -42,7 +43,7 @@ export default function JobFeedPage() {
       }}
     >
       {/* Header */}
-      <div style={{ maxWidth: 620, margin: "0 auto 28px" }}>
+      <div className="feed-header" style={{ maxWidth: 620, margin: "0 auto 28px" }}>
         <h1 style={{ fontSize: 26, fontWeight: 900, margin: 0, color: "#161811" }}>
           Job Feed
         </h1>
@@ -83,13 +84,16 @@ export default function JobFeedPage() {
           </p>
         </div>
       ) : (
-        <div style={{
-          maxWidth: 1000,
-          margin: "0 auto",
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-          gap: 24
-        }}>
+        <div 
+          className="feed-grid"
+          style={{
+            maxWidth: 1000,
+            margin: "0 auto",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+            gap: 24
+          }}
+        >
           {jobFeed.map((post) => (
             <JobCard
               key={post.id}
@@ -105,6 +109,13 @@ export default function JobFeedPage() {
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .feed-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08) !important; }
         .interested-btn:hover:not(:disabled) { background: #79ba06 !important; }
+        
+        @media (max-width: 640px) {
+          .feed-container { padding: 80px 16px 24px !important; }
+          .feed-header { margin-bottom: 20px !important; }
+          .feed-header h1 { font-size: 22px !important; }
+          .feed-grid { gap: 16px !important; }
+        }
       `}</style>
     </div>
   );

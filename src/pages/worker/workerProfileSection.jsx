@@ -180,7 +180,7 @@ const WorkerProfileSection = () => {
             {/* Header */}
 
             {/* Main Content */}
-            <main className="max-w-4xl mx-auto px-6 py-8">
+            <main className="max-w-4xl mx-auto px-6 pt-20 md:pt-8 pb-8">
 
                 {/* Page Title */}
                 <div className="flex items-center gap-4 mb-10">
@@ -199,7 +199,7 @@ const WorkerProfileSection = () => {
                             </g>
                         </svg>
                     </div>
-                    <h1 className="text-3xl font-bold text-[#161811]">Edit <span className='text-[#8ad007]'>Employer</span> Profile.</h1>
+                    <h1 className="text-2xl md:text-3xl font-bold text-[#161811]">Edit <span className='text-[#8ad007]'>Worker</span> Profile.</h1>
                 </div>
 
                 {/* Profile Photo Upload */}
@@ -479,13 +479,13 @@ const WorkerProfileSection = () => {
 
                     {/* Navigation Buttons */}
                     <div className="flex flex-col sm:flex-row items-center justify-between gap-5 pt-4 pb-12">
-                        <button
+                        {/* <button
                             type="button"
                             className="flex items-center gap-2 text-gray-500 hover:text-[#161811] font-medium transition-colors text-sm"
                         >
                             <span className="material-symbols-outlined text-[18px]">arrow_back</span>
                             Back to Personal Details
-                        </button>
+                        </button> */}
                         <button
                             type="submit"
                             disabled={loading || redirecting}

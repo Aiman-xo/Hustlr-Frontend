@@ -69,7 +69,7 @@ const ChatPage = () => {
     return (
         <div className="flex h-screen overflow-hidden bg-[#f8f8f5] font-[Manrope]">
         {/* Conversation List */}
-        <div className="w-[380px] border-r border-[#e5e5e0] bg-white flex flex-col">
+        <div className={`w-full md:w-[380px] border-r border-[#e5e5e0] bg-white flex flex-col ${activeContact ? 'hidden md:flex' : 'flex'}`}>
             <div className="p-6 border-b border-[#e5e5e0]">
                 <h2 className="text-2xl font-bold mb-4 text-[#181811]">Messages</h2>
                 <div className="relative">
@@ -147,12 +147,19 @@ const ChatPage = () => {
         </div>
     
         {/* Chat Window */}
-        <div className="flex-1 flex flex-col bg-white">
+        <div className={`flex-1 flex flex-col bg-white ${activeContact ? 'flex' : 'hidden md:flex'}`}>
             {activeContact ? (
                 <>
                     {/* Chat Header */}
-                    <header className="h-20 border-b border-[#e5e5e0] flex items-center justify-between px-8 bg-white/80 backdrop-blur-md z-10">
-                        <div className="flex items-center gap-4">
+                    <header className="h-20 border-b border-[#e5e5e0] flex items-center justify-between px-4 md:px-8 bg-white/80 backdrop-blur-md z-10">
+                        <div className="flex items-center gap-2 md:gap-4">
+                            {/* Back Button for mobile */}
+                            <button 
+                                onClick={() => setActiveContact(null)}
+                                className="md:hidden p-2 text-[#8c8c5f] hover:text-[#8ad007]"
+                            >
+                                <span className="material-symbols-outlined">arrow_back</span>
+                            </button>
                             <div className="relative shrink-0">
                                 {activeContact.other_party_profile_image ? (
                                     <img 
@@ -182,7 +189,7 @@ const ChatPage = () => {
                     </header>
     
                     {/* Message Thread */}
-                    <div className="flex-1 overflow-y-auto p-8 space-y-6">
+                    <div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-6">
                         {!isConnected && messages.length === 0 ? (
                             <div className="flex items-center justify-center h-full">
                                 <div className="text-center">
@@ -218,7 +225,7 @@ const ChatPage = () => {
                                     return (
                                         <div 
                                             key={m.id || i} 
-                                            className={`flex flex-col ${isMe ? 'items-end ml-auto' : 'items-start'} max-w-[70%] w-full`}
+                                            className={`flex flex-col ${isMe ? 'items-end ml-auto' : 'items-start'} max-w-[85%] md:max-w-[70%] w-full`}
                                         >
                                             <div className={`p-4 rounded-xl text-sm leading-relaxed ${
                                                 isMe 
@@ -247,9 +254,9 @@ const ChatPage = () => {
                     </div>
     
                     {/* Message Composer */}
-                    <div className="p-6 bg-white border-t border-[#e5e5e0]">
+                    <div className="p-4 md:p-6 bg-white border-t border-[#e5e5e0]">
                         <form onSubmit={handleSend}>
-                            <div className="flex items-center gap-4 bg-[#f5f5f0] rounded-2xl p-2 pl-4 pr-2">
+                            <div className="flex items-center gap-2 md:gap-4 bg-[#f5f5f0] rounded-2xl p-2 pl-3 md:pl-4 pr-2">
                                 <button 
                                     type="button"
                                     className="p-2 text-[#8c8c5f] hover:text-[#8ad007] transition-colors"

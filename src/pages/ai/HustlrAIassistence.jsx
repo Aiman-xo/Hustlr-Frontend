@@ -7,6 +7,7 @@ import ReactMarkdown from "react-markdown";
 import { toast } from 'react-toastify';
 import { Icons } from './AIicons';
 import { SendInterest } from '../../redux/slice/workerSlice';
+import { setAiOpen } from "../../redux/slice/authSlice";
 
 // ─── Typing indicator ──────────────────────────────────────────────────────────
 function TypingDots() {
@@ -235,8 +236,11 @@ export default function HustlrAIAssistant() {
     }
   };
 
-  // stop pulsing the FAB after first open
-  useEffect(() => { if (open) setPulse(false); }, [open]);
+  // sync state to Redux
+  useEffect(() => {
+    dispatch(setAiOpen(open));
+    if (open) setPulse(false); 
+  }, [open, dispatch]);
 
   useEffect(() => {
     // Only set the initial message if there are no messages yet

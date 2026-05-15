@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { logoutUser } from '../../../redux/slice/authSlice';
 import { useDispatch,useSelector } from 'react-redux'
 
 const Sidebar = () => {
     const dispatch = useDispatch();
+    const [isOpen, setIsOpen] = useState(false);
     const {unreadCount} = useSelector((state)=>state.worker);
+    const { isAiOpen } = useSelector((state) => state.auth);
     const getLinkClass = ({ isActive }) => {
         const baseClasses = "flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-all duration-200 text-xs cursor-pointer";
         
@@ -20,7 +22,41 @@ const Sidebar = () => {
     const profile_image = localStorage.getItem('profile_image');
     const username = localStorage.getItem('username')
   return (
-    <aside className="w-64 h-screen bg-white  border-r border-[#e2e6db] flex flex-col">
+    <>
+      {/* Mobile Toggle Button */}
+      {!isAiOpen && (
+      <button 
+        onClick={() => setIsOpen(!isOpen)}
+        className={`
+          md:hidden fixed top-8 right-5 z-[100] w-9 h-9 
+          flex items-center justify-center rounded-full border shadow-md
+          transition-all duration-300 ease-in-out active:scale-90
+          ${isOpen 
+            ? 'bg-white border-[#e2e6db] text-[#161811] rotate-90' 
+            : 'bg-[#8ad007] border-[#8ad007] text-white'
+          }
+        `}
+      >
+        <span className="material-symbols-outlined !text-[20px] font-bold">
+          {isOpen ? 'close' : 'menu'}
+        </span>
+      </button>
+      )}
+
+      {/* Overlay */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[80] md:hidden transition-all duration-300"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
+      <aside className={`
+        fixed inset-y-0 left-0 z-[90] w-64 h-screen bg-white border-r border-[#e2e6db] flex flex-col
+        transform transition-transform duration-300 ease-in-out
+        ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+        md:relative md:translate-x-0
+      `}>
       {/* Logo Section */}
       <div className="p-5 flex items-center gap-2.5">
       <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" className="w-9 h-9">
@@ -43,38 +79,39 @@ const Sidebar = () => {
       {/* Navigation */}
       <nav className="flex-1 px-3 py-2 space-y-0.5">
       {/* 2. Use NavLink instead of div */}
-      <NavLink to="/worker/dashboard" className={getLinkClass}>
+      <NavLink to="/worker/dashboard" className={getLinkClass} onClick={() => setIsOpen(false)}>
         <span className="material-symbols-outlined text-base">grid_view</span>
         <span>Dashboard</span>
       </NavLink>
 
-      <NavLink to="/worker/my-jobs" className={getLinkClass}>
+      <NavLink to="/worker/my-jobs" className={getLinkClass} onClick={() => setIsOpen(false)}>
         <span className="material-symbols-outlined text-base">work</span>
         <span>My Jobs</span>
       </NavLink>
 
-      <NavLink to="/worker/job-feed" className={getLinkClass}>
+      <NavLink to="/worker/job-feed" className={getLinkClass} onClick={() => setIsOpen(false)}>
         <span className="material-symbols-outlined text-base">travel_explore</span>
         <span>Find Jobs</span>
       </NavLink>
 
-      <NavLink to="/worker/payouts" className={getLinkClass}>
+      <NavLink to="/worker/payouts" className={getLinkClass} onClick={() => setIsOpen(false)}>
         <span className="material-symbols-outlined text-base">account_balance_wallet</span>
         <span>Payouts</span>
       </NavLink>
 
-      <NavLink to="/worker/requests" className={getLinkClass}>
+      <NavLink to="/worker/requests" className={getLinkClass} onClick={() => setIsOpen(false)}>
         <span className="material-symbols-outlined text-base">pending_actions</span>
         <span>Requests</span>
       </NavLink>
 
-      <NavLink to="/worker/messages" className={getLinkClass}>
+      <NavLink to="/worker/messages" className={getLinkClass} onClick={() => setIsOpen(false)}>
         <span className="material-symbols-outlined text-base">forum</span>
         <span>Messages</span>
       </NavLink>
 
       <NavLink 
         to="/worker/notifications" 
+        onClick={() => setIsOpen(false)}
         className={({ isActive }) => `${getLinkClass({ isActive })} flex items-center justify-between w-full`}
       >
         <div className="flex items-center gap-3">
@@ -88,7 +125,7 @@ const Sidebar = () => {
         </span>}
       </NavLink>
       
-      <NavLink to="/worker/profile" className={getLinkClass}>
+      <NavLink to="/worker/profile" className={getLinkClass} onClick={() => setIsOpen(false)}>
         <span className="material-symbols-outlined text-base">person</span>
         <span>Profile</span>
       </NavLink>
@@ -96,7 +133,8 @@ const Sidebar = () => {
     </nav>
         <div 
         onClick={()=>{
-            dispatch(logoutUser())
+            dispatch(logoutUser());
+            setIsOpen(false);
         }}
         className="flex items-center gap-2.5 px-3 py-2.5 mt-2 rounded-lg text-[#7c8c5f] hover:bg-red-50 hover:text-red-600 transition-all cursor-pointer text-xs font-bold group"
         >
@@ -140,6 +178,7 @@ const Sidebar = () => {
 
       </div>
     </aside>
+    </>
   );
 };
 

@@ -177,7 +177,8 @@ const authSlice = createSlice({
     authInitialized: false,
     isRefreshing: false,
 
-    location: null
+    location: null,
+    isAiOpen: false
   },
   reducers: {
     // Use this for the Axios Interceptor
@@ -204,6 +205,9 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.isRefreshing = false;
       }
+    },
+    setAiOpen: (state, action) => {
+      state.isAiOpen = action.payload;
     }
   },
 
@@ -441,5 +445,5 @@ const authSlice = createSlice({
   },
 })
 
-export const { setRefreshing, updateAccessToken } = authSlice.actions;
+export const { setRefreshing, updateAccessToken, setAiOpen } = authSlice.actions;
 export default authSlice.reducer;

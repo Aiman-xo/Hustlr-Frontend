@@ -62,7 +62,7 @@ function App() {
   useNotificationSocket(userId);
 
   const location = useLocation();
-  const hideAIPaths = ['/', '/login', '/role', '/resetPassword'];
+  const hideAIPaths = ['/', '/login', '/role', '/resetPassword', '/worker/messages', '/employer/messages'];
   const isAIHidden = hideAIPaths.includes(location.pathname) || location.pathname.startsWith('/register');
 
   return (
