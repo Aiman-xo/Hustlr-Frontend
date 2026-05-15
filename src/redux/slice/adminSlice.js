@@ -100,6 +100,32 @@ export const fetchFinancials = createAsyncThunk(
     }
 );
 
+// 8. Fetch All Skills
+export const fetchSkills = createAsyncThunk(
+    "admin/fetchSkills",
+    async (_, thunkAPI) => {
+        try {
+            const resp = await api.get("admin-interface/manage-skills/");
+            return resp.data.result;
+        } catch (err) {
+            return thunkAPI.rejectWithValue(err.response?.data || "Failed to fetch skills");
+        }
+    }
+);
+
+// 9. Add New Skill
+export const addSkill = createAsyncThunk(
+    "admin/addSkill",
+    async (skillName, thunkAPI) => {
+        try {
+            const resp = await api.post("admin-interface/manage-skills/", { name: skillName });
+            return resp.data.result;
+        } catch (err) {
+            return thunkAPI.rejectWithValue(err.response?.data || "Failed to add skill");
+        }
+    }
+);
+
 const adminSlice = createSlice({
     name: "admin",
     initialState: {
@@ -118,6 +144,7 @@ const adminSlice = createSlice({
             totalPages: 1,
             totalCount: 0,
         },
+        skills: [],
         loading: false,
         error: null,
         searchQuery: ""
@@ -173,6 +200,14 @@ const adminSlice = createSlice({
             .addCase(toggleEmployerBlock.fulfilled, (state, action) => {
                 const employer = state.employers.find(e => e.id === action.payload.employerId);
                 if (employer) employer.is_active = action.payload.is_active;
+            })
+            // Skills
+            .addCase(fetchSkills.fulfilled, (state, action) => {
+                state.skills = action.payload;
+            })
+            .addCase(addSkill.fulfilled, (state, action) => {
+                state.skills.push(action.payload);
+                state.skills.sort((a, b) => a.name.localeCompare(b.name));
             });
     }
 });

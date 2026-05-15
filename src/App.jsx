@@ -35,6 +35,7 @@ import AdminDashboard from './pages/admin/AdminDashboard'
 import UserManagement from './pages/admin/AdminUserManagement'
 import AdminJobOversight from './pages/admin/AdminJobOversight'
 import AdminFinancials from './pages/admin/AdminFinancials'
+import AdminSkillManagement from './pages/admin/AdminSkillManagement'
 import WorkerFinancials from './pages/worker/WorkerFinancials'
 import EmployerPayments from './pages/employer/EmployerPayments'
 import { initAuth } from './redux/slice/authSlice'
@@ -121,6 +122,7 @@ function App() {
             <Route path="users" element={<UserManagement />} />
             <Route path="jobs" element={<AdminJobOversight />} />
             <Route path="financials" element={<AdminFinancials />} />
+            <Route path="skills" element={<AdminSkillManagement />} />
           </Route>
         </Route>
 

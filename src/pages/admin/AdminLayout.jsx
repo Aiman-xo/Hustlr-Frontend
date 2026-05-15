@@ -20,6 +20,7 @@ const AdminLayout = () => {
     { name: "User Management", path: "/admin/users", icon: "group" },
     { name: "Job Oversight", path: "/admin/jobs", icon: "work_history" },
     { name: "Financials", path: "/admin/financials", icon: "payments" },
+    { name: "Skill Management", path: "/admin/skills", icon: "bolt" },
     // { name: "Settings", path: "/admin/settings", icon: "settings" },
   ];
 
